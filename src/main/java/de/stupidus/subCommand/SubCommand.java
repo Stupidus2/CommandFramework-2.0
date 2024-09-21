@@ -1,10 +1,10 @@
 package de.stupidus.subCommand;
 
 import de.stupidus.api.CMDFWSubCommand;
+import de.stupidus.api.Settings;
 import de.stupidus.command.Code;
 import de.stupidus.command.CommandManager;
 import de.stupidus.framework.CommandFramework;
-import de.stupidus.framework.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,8 @@ public class SubCommand implements CMDFWSubCommand {
     private CommandManager commandManager;
     private final boolean tabComplete;
     private Code code;
+    private String permission = null;
+    private ArrayList<Settings> settings = new ArrayList<>();
     public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete) {
         this.commandFramework = commandFramework;
         this.commandManager = this.commandFramework.getCommandManager();
@@ -34,8 +36,13 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     @Override
-    public void addSetting(Settings settings) {
+    public void addSetting(Settings setting) {
+        settings.add(setting);
+    }
 
+    @Override
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 
     @Override
@@ -46,6 +53,16 @@ public class SubCommand implements CMDFWSubCommand {
     @Override
     public Code getCode() {
         return code;
+    }
+
+    @Override
+    public List<Settings> getSettingsList() {
+        return settings;
+    }
+
+    @Override
+    public String getPermission() {
+        return permission;
     }
 
     @Override

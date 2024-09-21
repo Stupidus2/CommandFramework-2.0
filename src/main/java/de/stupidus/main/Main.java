@@ -16,9 +16,4 @@ public class Main extends JavaPlugin {
         initializer.addPackage("de.stupidus.commands");
         initializer.register(this);
     }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
 }

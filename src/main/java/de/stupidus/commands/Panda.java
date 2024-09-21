@@ -4,8 +4,9 @@ import de.stupidus.api.Initialize;
 import de.stupidus.command.Code;
 import de.stupidus.command.Command;
 import de.stupidus.subCommand.SubCommand;
+import de.stupidus.Messages.translator.Translation;
+import de.stupidus.Messages.translator.Translator;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 @Initialize
 public class Panda extends Command {
@@ -18,23 +19,33 @@ public class Panda extends Command {
 
     @Override
     public boolean execute(CommandSender commandSender, org.bukkit.command.Command command, String cmd, String[] args) {
-        commandSender.sendMessage("Hi");
+
+        Translator translation = new Translator();
+
+        translation.addTranslationMessage(Translation.English, "Hello!");
+        translation.addTranslationMessage(Translation.German, "Hallo!");
+
+        translation.sendMessage(commandSender);
         return true;
     }
 
     @Override
-    public void subCommandInitialize() {}
+    public void subCommandInitialize() {
+        panda.setPermission("PANDASPAWN");
+        setPermission("TEST");
+
+    }
 
     @Override
     public void subCommandCode(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args) {
         panda.setCode(new Code() {
             @Override
             public void functionToExecute() {
-                setPanda(player);
+                setPanda(sender);
             }
         });
     }
-    public void setPanda(Player player) {
-        player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.PANDA);
+    public void setPanda(CommandSender player) {
+        player.sendMessage("TEST");
     }
 }

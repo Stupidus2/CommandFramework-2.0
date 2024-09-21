@@ -1,14 +1,14 @@
 de\stupidus\main\Main.class
 de\stupidus\api\CMDFWSubCommand.class
+de\stupidus\api\Settings.class
 de\stupidus\command\CommandManager.class
 de\stupidus\api\Initialize.class
 de\stupidus\framework\Initializer.class
 de\stupidus\api\CMDFWMessage.class
 de\stupidus\api\Messages.class
 de\stupidus\api\CMDFWCommand.class
-de\stupidus\commands\Test2.class
 de\stupidus\command\Command.class
-de\stupidus\framework\Settings.class
+de\stupidus\Messages\translator\Translator.class
 de\stupidus\commands\Panda$1.class
 de\stupidus\api\CMDFWMessageManager.class
 de\stupidus\subCommand\SubCommand.class
@@ -16,6 +16,6 @@ de\stupidus\commands\Panda.class
 de\stupidus\command\Code.class
 de\stupidus\command\PlayerJoin.class
 de\stupidus\Messages\Message.class
-de\stupidus\commands\Test2$1.class
+de\stupidus\Messages\translator\Translation.class
 de\stupidus\Messages\MessageManager.class
 de\stupidus\framework\CommandFramework.class

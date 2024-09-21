@@ -61,8 +61,9 @@ public class CommandFramework {
 
 
     private static void messageInit(Message message) {
-        message.newMessage(Messages.UNKNOWN_COMMAND_NAME, ChatColor.RED + "Could not find this command");
-        message.newMessage(Messages.NOT_A_PLAYER, ChatColor.RED + "You have to be a player to execute this command!");
+        message.newMessage(Messages.UNKNOWN_COMMAND_NAME, ChatColor.YELLOW + "Could not find this command");
+        message.newMessage(Messages.NOT_A_PLAYER, ChatColor.YELLOW + "You have to be a player to execute this command!");
+        message.newMessage(Messages.MISSING_PERMISSION, ChatColor.YELLOW + "You need following permission: "+ ChatColor.RED +"%permission_required%");
 
     }
 }

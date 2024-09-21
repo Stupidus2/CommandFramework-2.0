@@ -4,8 +4,8 @@ import de.stupidus.Messages.Message;
 import de.stupidus.api.CMDFWCommand;
 import de.stupidus.api.Messages;
 import de.stupidus.framework.CommandFramework;
+import de.stupidus.api.Settings;
 import de.stupidus.subCommand.SubCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -22,6 +22,7 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
     private ArrayList<SubCommand> subCommands;
     private Message message = CommandFramework.getMessages();
     private String name;
+    private String permission = null;
 
     public Command(String name) {
         this.name = name;
@@ -32,21 +33,13 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
     //Command System
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(message.getMessage(Messages.NOT_A_PLAYER));
-            return true;
-        }
-        Player player = (Player) sender;
-        subCommandInitialize();
-        subCommandCode(sender,player,command,s,args);
 
         String commandString = null;
-
-        for (int i = 0; i < args.length; i++) {
+        for (String arg : args) {
             if (commandString == null) {
-                commandString = args[i];
+                commandString = arg;
             } else {
-                commandString = commandString + " " + args[i];
+                commandString = commandString + " " + arg;
             }
         }
 
@@ -67,16 +60,12 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
                                         continue outerLoop;
                                     }
                                 }
-                                Code code = subCommand.getCode();
-                                code.functionToExecute();
-                                return true;
+                                return checkSubCommandPermission(sender, subCommand, command, s, args);
                             } else {
 
                                 if (args.length == commandLength) {
                                     if (args[commandLength - 1].equalsIgnoreCase(name)) {
-                                        Code code = subCommand.getCode();
-                                        code.functionToExecute();
-                                        return true;
+                                        return checkSubCommandPermission(sender, subCommand, command, s, args);
                                     }
                                 }
                             }
@@ -85,16 +74,43 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
                 }
             }
             sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME));
-      } else {
-            execute(sender, command, s,args);
-      }
-     return true;
+        } else {
+            if (permission == null || sender.hasPermission(getPermission())) {
+                execute(sender, command, s, args);
+            } else {
+                sender.sendMessage(message.getMessage(Messages.MISSING_PERMISSION).replace("%permission_required%", getPermission()));
+            }
+        }
+        return true;
+    }
+
+    private boolean checkSubCommandPermission(CommandSender sender, SubCommand subCommand, org.bukkit.command.Command command, String s, String[] args) {
+        List<Settings> settingsList = subCommand.getSettingsList();
+        Player player = null;
+        if (settingsList.contains(Settings.PLAYER) && !(sender instanceof Player)) {
+            sender.sendMessage(message.getMessage(Messages.NOT_A_PLAYER));
+            return true;
+        } else if (sender instanceof Player){
+            player = (Player) sender;
+        }
+        subCommandInitialize();
+        subCommandCode(sender, player, command, s, args);
+
+        if (subCommand.getPermission() == null || subCommand.getPermission() != null && sender.hasPermission(subCommand.getPermission())) {
+            Code code = subCommand.getCode();
+            code.functionToExecute();
+        } else {
+            sender.sendMessage(message.getMessage(Messages.MISSING_PERMISSION).replace("%permission_required%", subCommand.getPermission()));
+        }
+        return true;
     }
 
     // Execute, SubCommand initialisierung, Command Parameter werden Initialisiert
 
     @Override
-    public boolean execute(CommandSender commandSender, org.bukkit.command.Command command, String cmd, String[] args){return false;}
+    public boolean execute(CommandSender commandSender, org.bukkit.command.Command command, String cmd, String[] args) {
+        return false;
+    }
 
     @Override
     public abstract void subCommandInitialize();
@@ -107,12 +123,22 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
         return commandFramework;
     }
 
+    @Override
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    @Override
+    public String getPermission() {
+        return permission;
+    }
     // Tab Complete
 
     @Override
     public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
         List<String> tabComplete = new ArrayList<>();
-            for (SubCommand subCommand: subCommands) {
+        for (SubCommand subCommand : subCommands) {
+            if (subCommand.getPermission() == null || subCommand.getPermission() != null && sender.hasPermission(subCommand.getPermission())) {
                 if (subCommand.getTabCompletable()) {
                     for (String name : subCommand.getNameList()) {
                         if (name != null) {
@@ -134,6 +160,7 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
                     }
                 }
             }
+        }
         return tabComplete;
     }
 }
