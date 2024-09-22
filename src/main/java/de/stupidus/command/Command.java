@@ -75,9 +75,10 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
             sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender));
         } else {
             if (permission == null || sender.hasPermission(getPermission())) {
+                initialize();
                 execute(sender, command, s, args);
             } else {
-                sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender));
+                sender.sendMessage(message.getMessage(Messages.MISSING_PERMISSION).getTranslatedMessage(sender));
             }
         }
         return true;
@@ -92,14 +93,14 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
         } else if (sender instanceof Player){
             player = (Player) sender;
         }
-        subCommandInitialize();
+        initialize();
         subCommandCode(sender, player, command, s, args);
 
         if (subCommand.getPermission() == null || subCommand.getPermission() != null && sender.hasPermission(subCommand.getPermission())) {
             Code code = subCommand.getCode();
             code.functionToExecute();
         } else {
-            sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender).replace("%permission_required%", subCommand.getPermission()));
+            sender.sendMessage(message.getMessage(Messages.MISSING_PERMISSION).getTranslatedMessage(sender).replace("%permission_required%", subCommand.getPermission()));
         }
         return true;
     }
@@ -112,7 +113,7 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
     }
 
     @Override
-    public abstract void subCommandInitialize();
+    public abstract void initialize();
 
     @Override
     public abstract void subCommandCode(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args);

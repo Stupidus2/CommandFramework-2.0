@@ -1,8 +1,6 @@
 package de.stupidus.framework;
 
 import de.stupidus.api.Initialize;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -20,30 +18,33 @@ public class Initializer {
     private List<String> packageList = new ArrayList<>();
 
     public void register(JavaPlugin plugin) {
-        for (String packageName : packageList) {
-            try {
-                Bukkit.getConsoleSender().sendMessage("[CommandFramework] §cInitializing commands...");
-                List<Class<?>> classes = getClassesFromJar(packageName);
-                for (Class<?> clazz : classes) {
-                    if (clazz.isAnnotationPresent(Initialize.class)) {
-                        Object instance = clazz.getDeclaredConstructor().newInstance();
-                        for (Method method : clazz.getMethods()) {
-                            if (method.getName().equalsIgnoreCase("subCommandInitialize")) {
-                                invokeMethod(method, instance);
-                            }
-                        }
-                    }
-                }
-                Bukkit.getConsoleSender().sendMessage("[CommandFramework] §cInitializing commands was successful!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+        updateClass(null);
         if (plugin != null) {
             for (String name : CommandFramework.getAllCommandNamesCommandExecutor().keySet()) {
                 plugin.getCommand(name).setExecutor(CommandFramework.getAllCommandNamesCommandExecutor().get(name));
                 plugin.getCommand(name).setTabCompleter(CommandFramework.getAllCommandNamesTabCompleter().get(name));
+            }
+        }
+    }
+
+    public void updateClass(String className) {
+        for (String packageName : packageList) {
+            try {
+                List<Class<?>> classes = getClassesFromJar(packageName);
+                for (Class<?> clazz : classes) {
+                    if (clazz.isAnnotationPresent(Initialize.class)) {
+                        if (className == null || clazz.getName().equalsIgnoreCase(className)) {
+                            Object instance = clazz.getDeclaredConstructor().newInstance();
+                            for (Method method : clazz.getMethods()) {
+                                if (method.getName().equalsIgnoreCase("subCommandInitialize")) {
+                                    invokeMethod(method, instance);
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

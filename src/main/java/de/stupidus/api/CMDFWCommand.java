@@ -23,7 +23,7 @@ public interface CMDFWCommand {
      * For example:
      * subCommand.addChoose("name")
      */
-    void subCommandInitialize();
+    void initialize();
 
     /**
      * Set the code of a subCommand in this function

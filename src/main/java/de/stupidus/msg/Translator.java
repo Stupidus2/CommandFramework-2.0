@@ -3,13 +3,17 @@ package de.stupidus.msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.Console;
 import java.util.HashMap;
 
 public class Translator {
 
     private HashMap<String, String> translatedMessage = new HashMap<>();
+
+    private static String consoleLanguage;
 
     public void sendMessage(CommandSender sender) {
         if (translatedMessage.containsKey("en") && translatedMessage.containsKey("de")) {
@@ -21,7 +25,11 @@ public class Translator {
 
                 player.sendMessage(message);
             } else {
-                sender.sendMessage(translatedMessage.get("en"));
+                if (sender instanceof ConsoleCommandSender && consoleLanguage != null) {
+                    sender.sendMessage(translatedMessage.get(consoleLanguage));
+                } else {
+                    sender.sendMessage(translatedMessage.get("en"));
+                }
             }
         } else {
             sender.sendMessage(ChatColor.RED+"You have to set a german and english translator");
@@ -37,6 +45,13 @@ public class Translator {
             player.sendMessage(message);
         } else {
             player.sendMessage(ChatColor.RED+"You have to set a german and english translator");
+        }
+    }
+    public static void setConsoleLanguage(Translation translation) {
+        if (translation == Translation.German) {
+            consoleLanguage = "de";
+        } else if (translation == Translation.English) {
+            consoleLanguage = "en";
         }
     }
 
@@ -60,6 +75,8 @@ public class Translator {
                 String[] langArray = lang.split("_");
 
                 return translatedMessage.getOrDefault(langArray[0], translatedMessage.get("en"));
+            } else if(consoleLanguage != null && sender instanceof ConsoleCommandSender) {
+                return translatedMessage.get(consoleLanguage);
             }
             return translatedMessage.get("en");
         }
