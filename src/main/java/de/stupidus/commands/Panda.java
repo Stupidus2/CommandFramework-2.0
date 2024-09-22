@@ -1,11 +1,10 @@
 package de.stupidus.commands;
 
 import de.stupidus.api.Initialize;
+import de.stupidus.api.Settings;
 import de.stupidus.command.Code;
 import de.stupidus.command.Command;
 import de.stupidus.subCommand.SubCommand;
-import de.stupidus.Messages.translator.Translation;
-import de.stupidus.Messages.translator.Translator;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 @Initialize
@@ -19,13 +18,6 @@ public class Panda extends Command {
 
     @Override
     public boolean execute(CommandSender commandSender, org.bukkit.command.Command command, String cmd, String[] args) {
-
-        Translator translation = new Translator();
-
-        translation.addTranslationMessage(Translation.English, "Hello!");
-        translation.addTranslationMessage(Translation.German, "Hallo!");
-
-        translation.sendMessage(commandSender);
         return true;
     }
 
@@ -33,6 +25,7 @@ public class Panda extends Command {
     public void subCommandInitialize() {
         panda.setPermission("PANDASPAWN");
         setPermission("TEST");
+        panda.addSetting(Settings.PLAYER);
 
     }
 

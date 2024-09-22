@@ -22,7 +22,7 @@ public class Initializer {
     public void register(JavaPlugin plugin) {
         for (String packageName : packageList) {
             try {
-                Bukkit.getConsoleSender().sendMessage("[CommandFramework] §cInitializing commands");
+                Bukkit.getConsoleSender().sendMessage("[CommandFramework] §cInitializing commands...");
                 List<Class<?>> classes = getClassesFromJar(packageName);
                 for (Class<?> clazz : classes) {
                     if (clazz.isAnnotationPresent(Initialize.class)) {

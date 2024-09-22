@@ -1,4 +1,4 @@
-package de.stupidus.Messages.translator;
+package de.stupidus.msg;
 
 public enum Translation {
     English,

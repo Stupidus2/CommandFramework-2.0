@@ -1,6 +1,6 @@
 package de.stupidus.command;
 
-import de.stupidus.Messages.Message;
+import de.stupidus.msg.Message;
 import de.stupidus.api.CMDFWCommand;
 import de.stupidus.api.Messages;
 import de.stupidus.framework.CommandFramework;
@@ -20,7 +20,7 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
     //Variablen
     private CommandFramework commandFramework;
     private ArrayList<SubCommand> subCommands;
-    private Message message = CommandFramework.getMessages();
+    private final Message message = CommandFramework.getMessages();
     private String name;
     private String permission = null;
 
@@ -33,7 +33,6 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
     //Command System
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
-
         String commandString = null;
         for (String arg : args) {
             if (commandString == null) {
@@ -73,12 +72,12 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
                     }
                 }
             }
-            sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME));
+            sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender));
         } else {
             if (permission == null || sender.hasPermission(getPermission())) {
                 execute(sender, command, s, args);
             } else {
-                sender.sendMessage(message.getMessage(Messages.MISSING_PERMISSION).replace("%permission_required%", getPermission()));
+                sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender));
             }
         }
         return true;
@@ -88,7 +87,7 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
         List<Settings> settingsList = subCommand.getSettingsList();
         Player player = null;
         if (settingsList.contains(Settings.PLAYER) && !(sender instanceof Player)) {
-            sender.sendMessage(message.getMessage(Messages.NOT_A_PLAYER));
+            sender.sendMessage(message.getMessage(Messages.NOT_A_PLAYER).getTranslatedMessage(sender));
             return true;
         } else if (sender instanceof Player){
             player = (Player) sender;
@@ -100,7 +99,7 @@ public abstract class Command implements CMDFWCommand, CommandExecutor, TabCompl
             Code code = subCommand.getCode();
             code.functionToExecute();
         } else {
-            sender.sendMessage(message.getMessage(Messages.MISSING_PERMISSION).replace("%permission_required%", subCommand.getPermission()));
+            sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender).replace("%permission_required%", subCommand.getPermission()));
         }
         return true;
     }
