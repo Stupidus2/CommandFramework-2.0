@@ -5,7 +5,6 @@ import de.stupidus.command.CommandManager;
 import de.stupidus.msg.Message;
 import de.stupidus.msg.Translation;
 import de.stupidus.msg.Translator;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;

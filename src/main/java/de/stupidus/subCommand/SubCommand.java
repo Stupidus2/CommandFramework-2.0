@@ -34,7 +34,6 @@ public class SubCommand implements CMDFWSubCommand {
             nameList.add(name);
         }
     }
-
     @Override
     public void addSetting(Settings setting) {
         settings.add(setting);

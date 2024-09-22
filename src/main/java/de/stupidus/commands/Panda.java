@@ -30,6 +30,9 @@ public class Panda extends Command {
         setPermission("TEST");
         panda.addSetting(Settings.PLAYER);
 
+        for (int i = 0; i<15; i++) {
+            panda.addChoose(String.valueOf(i));
+        }
     }
 
     @Override

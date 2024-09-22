@@ -36,7 +36,7 @@ public class Initializer {
                         if (className == null || clazz.getName().equalsIgnoreCase(className)) {
                             Object instance = clazz.getDeclaredConstructor().newInstance();
                             for (Method method : clazz.getMethods()) {
-                                if (method.getName().equalsIgnoreCase("subCommandInitialize")) {
+                                if (method.getName().equalsIgnoreCase("initialize")) {
                                     invokeMethod(method, instance);
                                 }
                             }
