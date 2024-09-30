@@ -1,6 +1,8 @@
 package de.stupidus.framework;
 
 import de.stupidus.api.Initialize;
+import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -21,8 +23,11 @@ public class Initializer {
         updateClass(null);
         if (plugin != null) {
             for (String name : CommandFramework.getAllCommandNamesCommandExecutor().keySet()) {
+
                 plugin.getCommand(name).setExecutor(CommandFramework.getAllCommandNamesCommandExecutor().get(name));
+
                 plugin.getCommand(name).setTabCompleter(CommandFramework.getAllCommandNamesTabCompleter().get(name));
+                Bukkit.getPluginManager().registerEvents(CommandFramework.getAllCommandNamesListener().get(name), plugin);
             }
         }
     }

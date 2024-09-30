@@ -4,35 +4,27 @@ import de.stupidus.api.Initialize;
 import de.stupidus.api.Settings;
 import de.stupidus.command.Code;
 import de.stupidus.command.Command;
-import de.stupidus.framework.CommandFramework;
-import de.stupidus.framework.Initializer;
 import de.stupidus.subCommand.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 @Initialize
 public class Panda extends Command {
 
-    SubCommand panda = new SubCommand(getCommandFramework(), "spawn", true);
-
-    SubCommand schem = new SubCommand(getCommandFramework(),null, true);
+    SubCommand panda = new SubCommand(getCommandFramework(),null, true);
 
     public Panda() {
         super("panda");
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, org.bukkit.command.Command command, String cmd, String[] args) {
-        return true;
-    }
-    @Override
     public void initialize() {
-        panda.setPermission("PANDASPAWN");
         setPermission("TEST");
         panda.addSetting(Settings.PLAYER);
-
-        for (int i = 0; i<15; i++) {
-            panda.addChoose(String.valueOf(i));
-        }
+        panda.setPermission("PANDASPAWN");
+        panda.addChoose("jaaaaa <[sdf]> <[sdf]> <[sdf]>");
+        panda.addChoose("jaaaaa <[sdf]>");
+        panda.addChoose("dfgvf dfgvfg");
     }
 
     @Override
@@ -44,7 +36,8 @@ public class Panda extends Command {
             }
         });
     }
+
     public void setPanda(Player player, String[] args) {
-        player.sendMessage("TEST");
+            player.sendMessage("TEST");
     }
 }

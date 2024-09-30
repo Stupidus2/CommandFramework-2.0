@@ -8,6 +8,7 @@ import de.stupidus.msg.Translator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.event.Listener;
 
 import java.util.*;
 
@@ -19,10 +20,13 @@ public class CommandFramework {
     private static HashMap<Messages, Translator> messages = new HashMap<>();
     private static HashMap<String, CommandExecutor> commandNamesCommandExecutor = new HashMap<>();
     private static HashMap<String, TabCompleter> commandNamesTabCompleter = new HashMap<>();
+    private static HashMap<String, Listener> commandNamesListener = new HashMap<>();
+    private static boolean spigotTabCompleter = false;
 
-    public CommandFramework(String name, CommandExecutor commandExecutor, TabCompleter tabCompleter) {
+    public CommandFramework(String name, CommandExecutor commandExecutor, TabCompleter tabCompleter, Listener listener) {
         commandNamesCommandExecutor.putIfAbsent(name, commandExecutor);
         commandNamesTabCompleter.putIfAbsent(name, tabCompleter);
+        commandNamesListener.putIfAbsent(name, listener);
     }
 
     public CommandFramework() {
@@ -52,6 +56,10 @@ public class CommandFramework {
         return commandNamesTabCompleter;
     }
 
+    public static HashMap<String, Listener> getAllCommandNamesListener() {
+        return commandNamesListener;
+    }
+
 
     //Non-static methods
 
@@ -61,8 +69,9 @@ public class CommandFramework {
         }
         return commandManager;
     }
-
-
+    public static void setSpigotTabCompleter(boolean bool) {
+        spigotTabCompleter = bool;
+    }
     private static void messageInit() {
         //Unknown Command message
         Translator unknownCommandTranslator = new Translator();

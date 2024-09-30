@@ -26,6 +26,17 @@ public interface CMDFWSubCommand {
     void setPermission(String permission);
 
     /**
+     * Clean up all added chooses of one command (Remove chooses witch are twice)
+     */
+    void filterChoose();
+
+    /**
+     * Check if the subCommands contains a paramater e.g. <[duration]>
+     * @return true if it contains, false if it not contains
+     */
+    boolean containsVarArg();
+
+    /**
      * Set code for the subcommand
      * @param codeToExecute Create new code and then basically add the code you want to execute
      */
