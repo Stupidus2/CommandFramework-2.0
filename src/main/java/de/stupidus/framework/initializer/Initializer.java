@@ -1,8 +1,12 @@
-package de.stupidus.framework;
+package de.stupidus.framework.initializer;
 
+import de.stupidus.api.CMDFWCommand;
 import de.stupidus.api.Initialize;
+import de.stupidus.command.command.Command;
+import de.stupidus.framework.CommandFramework;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -12,22 +16,24 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class Initializer {
     private List<String> packageList = new ArrayList<>();
+    private List<Class<?>> classes = null;
+    private HashMap<Command, Boolean> containsExecute = new HashMap<>();
 
     public void register(JavaPlugin plugin) {
         updateClass(null);
         if (plugin != null) {
-            for (String name : CommandFramework.getAllCommandNamesCommandExecutor().keySet()) {
-
-                plugin.getCommand(name).setExecutor(CommandFramework.getAllCommandNamesCommandExecutor().get(name));
-
-                plugin.getCommand(name).setTabCompleter(CommandFramework.getAllCommandNamesTabCompleter().get(name));
-                Bukkit.getPluginManager().registerEvents(CommandFramework.getAllCommandNamesListener().get(name), plugin);
+            for (Command command : CommandFramework.getCommands()) {
+                plugin.getCommand(command.getName()).setExecutor(command);
+                plugin.getCommand(command.getName()).setTabCompleter(command);
+                Bukkit.getPluginManager().registerEvents(command, plugin);
+                containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "execute"));
             }
         }
     }
@@ -35,7 +41,9 @@ public class Initializer {
     public void updateClass(String className) {
         for (String packageName : packageList) {
             try {
-                List<Class<?>> classes = getClassesFromJar(packageName);
+                if (classes == null) {
+                    classes = getClassesFromJar(packageName);
+                }
                 for (Class<?> clazz : classes) {
                     if (clazz.isAnnotationPresent(Initialize.class)) {
                         if (className == null || clazz.getName().equalsIgnoreCase(className)) {
@@ -104,5 +112,23 @@ public class Initializer {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean checkIfMethodIsOverridden(Class<?> baseClass, Class<?> subClass, String methodName) {
+        try {
+            Method baseMethod = baseClass.getDeclaredMethod(methodName, CommandSender.class, Player.class, org.bukkit.command.Command.class, String.class, String[].class);
+            Method subMethod = subClass.getDeclaredMethod(methodName, CommandSender.class, Player.class, org.bukkit.command.Command.class, String.class, String[].class);
+
+            if (!baseMethod.equals(subMethod)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+    public boolean containsExecuteMethod(Command command) {
+        return containsExecute.get(command);
     }
 }

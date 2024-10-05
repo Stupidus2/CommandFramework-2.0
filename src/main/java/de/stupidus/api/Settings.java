@@ -1,5 +1,8 @@
 package de.stupidus.api;
 
 public enum Settings {
-    PLAYER
+    PLAYER,
+    ONLY_CONSOLE_EXECUTABLE,
+    COMMAND_SYNTAX,
+    SOUND
 }

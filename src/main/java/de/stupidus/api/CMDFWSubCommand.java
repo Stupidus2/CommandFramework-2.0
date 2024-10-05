@@ -1,80 +1,116 @@
 package de.stupidus.api;
 
-import de.stupidus.command.Code;
+import de.stupidus.command.others.Code;
+import de.stupidus.command.syntax.Syntax;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface CMDFWSubCommand {
 
     /**
-     * Add another way to execute a subcommand
-     * @param name Name for the new way
+     * Adds an alternative way to execute a subcommand, providing a different string to trigger the subcommand.
+     *
+     * @param name The alternative string (or phrase) that can be used to execute the subcommand.
+     *             Example: "spawn panda" or "panda".
      */
     void addChoose(String name);
 
     /**
-     * Add settings to your subCommand - Currently not implemented
-     * @param settings The setting you would like to add
+     * Adds specific settings or parameters to the subcommand.
+     * Settings may define additional command behaviors or constraints.
+     *
+     * @param settings The settings to be applied to the subcommand.
+     *                 Example: {@link Settings#PLAYER}, {@link Settings#COMMAND_SYNTAX}.
      */
     void addSetting(Settings settings);
 
     /**
-     * Set a permission for the subCommand
-     * @param permission Permission witch should be added to the subCommand
+     * Sets the required permission for executing the subcommand.
+     *
+     * @param permission The permission node required to run the subcommand.
+     *                   Example: "myplugin.use.panda".
      */
-
     void setPermission(String permission);
 
     /**
-     * Clean up all added chooses of one command (Remove chooses witch are twice)
+     * Filters and removes duplicate entries from the list of alternative executions for the subcommand.
+     * This ensures that each alternative is unique.
      */
     void filterChoose();
 
     /**
-     * Check if the subCommands contains a paramater e.g. <[duration]>
-     * @return true if it contains, false if it not contains
+     * Checks whether the subcommand contains a variable argument (e.g., placeholders like <[duration]>).
+     * This is useful when commands expect dynamic input such as a number or player name.
+     *
+     * @return true if the subcommand contains a variable argument, false otherwise.
      */
     boolean containsVarArg();
 
     /**
-     * Set code for the subcommand
-     * @param codeToExecute Create new code and then basically add the code you want to execute
+     * Sets the code that should be executed when the subcommand is called.
+     * This method is deprecated in favor of {@link #setCode(Runnable)}.
+     *
+     * @param codeToExecute The {@link Code} object representing the actions to be executed.
+     * @deprecated Use {@link #setCode(Runnable)} instead for better compatibility with future versions.
      */
+    @Deprecated
     void setCode(Code codeToExecute);
 
     /**
-     * Get code of the subCommand
-     * @return Code of the subCommand
+     * Sets the code that will be executed when the subcommand is invoked.
+     *
+     * @param code A {@link Runnable} containing the logic to be executed.
+     *             Example:
+     *             <pre>
+     *             subCommand.setCode(() -> {
+     *                 yourFunction(player, args);
+     *             });
+     *             </pre>
+     */
+    void setCode(Runnable code);
+
+    /**
+     * Retrieves the code object associated with the subcommand.
+     *
+     * @return The {@link Code} object that represents the executable logic of the subcommand.
      */
     Code getCode();
 
     /**
-     * All different names for the subCommand
-     * <p>
-     * For example:
-     * "spawn panda"
-     * "panda"
-     * Both expressions are spawning a panda in this example
-     * <p>
-     * @return List with all names
+     * Retrieves the {@link Runnable} code that will be executed when the subcommand is invoked.
+     *
+     * @return The runnable code that will execute when the subcommand is triggered.
+     */
+    Runnable getRunnableCode();
+
+    /**
+     * Retrieves a list of all alternative names or command strings for the subcommand.
+     * These names can be used to execute the subcommand.
+     *
+     * @return A list of strings representing all possible ways to trigger the subcommand.
+     *         Example: ["spawn panda", "panda"].
      */
     List<String> getNameList();
 
     /**
-     * Get permission for the subCommand to execute
-     * @return String with permission
+     * Retrieves the permission required to execute the subcommand.
+     *
+     * @return A string representing the permission node for the subcommand.
      */
     String getPermission();
 
     /**
-     * Get the list with all settings for a subCommand
-     * @return Settings list
+     * Retrieves the list of settings associated with the subcommand.
+     *
+     * @return A list of {@link Settings} objects that define various behaviors for the subcommand.
      */
-    List<Settings> getSettingsList();
+    List<Settings> getSettings();
 
     /**
-     * Check if the subCommand is tabCompletable
-     * @return Boolean if its tabCompletable
+     * Checks whether the subcommand is tab-completable, meaning it will show suggestions during tab completion.
+     *
+     * @return true if the subcommand supports tab completion, false otherwise.
      */
     boolean getTabCompletable();
 }

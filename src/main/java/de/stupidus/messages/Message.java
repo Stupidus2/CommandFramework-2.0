@@ -1,7 +1,6 @@
-package de.stupidus.msg;
+package de.stupidus.messages;
 
 import de.stupidus.api.CMDFWMessageManager;
-import de.stupidus.api.Messages;
 import de.stupidus.api.CMDFWMessage;
 
 import java.util.HashMap;

@@ -2,24 +2,29 @@ package de.stupidus.subCommand;
 
 import de.stupidus.api.CMDFWSubCommand;
 import de.stupidus.api.Settings;
-import de.stupidus.command.Code;
-import de.stupidus.command.CommandManager;
+import de.stupidus.command.others.Code;
+import de.stupidus.command.command.CommandManager;
 import de.stupidus.framework.CommandFramework;
+import org.bukkit.command.Command;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class SubCommand implements CMDFWSubCommand {
+
+    // FIELDS
     private final CommandFramework commandFramework;
-    private CommandManager commandManager;
+    private final CommandManager commandManager;
     private final boolean tabComplete;
     private Code code;
-    private String permission = null;
-    private ArrayList<Settings> settings = new ArrayList<>();
-    private HashMap<String, List<String>> varArg = new HashMap<>();
+    private String permission;
+    private final List<Settings> settings = new ArrayList<>();
+    private final Map<String, List<String>> varArg = new HashMap<>();
     private List<String> nameList = new ArrayList<>();
+    private Runnable runnableCode;
 
+    // CONSTRUCTOR
     public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete) {
         this.commandFramework = commandFramework;
         this.commandManager = this.commandFramework.getCommandManager();
@@ -28,39 +33,36 @@ public class SubCommand implements CMDFWSubCommand {
         this.tabComplete = tabComplete;
         commandManager.addSubCommand(this);
     }
+
+    // ADD CHOOSE (TO EXECUTE SUBCOMMAND)
     @Override
     public void addChoose(String name) {
-        if (!nameList.contains(name) && name != null) {
+        if (name != null && !nameList.contains(name)) {
             nameList.add(name);
 
-            //Check if arg subCommand contains <[ and ]>, store in list
+            // Check if subCommand args contain <[ ]> and store in list
+            List<String> varArgList = Arrays.stream(name.split(" "))
+                    .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
+                    .collect(Collectors.toList());
 
-            String[] nameArray = name.split(" ");
-            List<String> varArgList = new ArrayList<>();
-            for (String s: nameArray) {
-                if (s.startsWith("<[") && s.endsWith("]>")) {
-                    varArgList.add(s);
-                }
-            }
             if (!varArgList.isEmpty()) {
                 varArg.putIfAbsent(name, varArgList);
             }
         }
     }
+
+    // UTIL FUNCTIONS
     @Override
     public void filterChoose() {
-        List<String> cleanedList = new ArrayList<>();
-        for (String name: nameList) {
-            if (!cleanedList.contains(name)) {
-                cleanedList.add(name);
-            }
-        }
-        nameList = cleanedList;
+        nameList = nameList.stream().distinct().collect(Collectors.toList());
     }
+
     @Override
     public boolean containsVarArg() {
         return !varArg.isEmpty();
     }
+
+    // GETTER, SETTER, ADDER
     @Override
     public void addSetting(Settings setting) {
         settings.add(setting);
@@ -72,8 +74,19 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     @Override
+    public String getPermission() {
+        return permission;
+    }
+
+    @Override
+    @Deprecated
     public void setCode(Code codeToExecute) {
-        code = codeToExecute;
+        this.code = codeToExecute;
+    }
+
+    @Override
+    public void setCode(Runnable code) {
+        this.runnableCode = code;
     }
 
     @Override
@@ -82,13 +95,13 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     @Override
-    public List<Settings> getSettingsList() {
-        return settings;
+    public Runnable getRunnableCode() {
+        return runnableCode;
     }
 
     @Override
-    public String getPermission() {
-        return permission;
+    public List<Settings> getSettings() {
+        return settings;
     }
 
     @Override

@@ -1,6 +1,4 @@
-package de.stupidus.msg;
-
-import de.stupidus.api.Messages;
+package de.stupidus.messages;
 
 import java.util.HashMap;
 

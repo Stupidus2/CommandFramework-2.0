@@ -1,0 +1,11 @@
+package de.stupidus.messages;
+
+public enum Messages {
+    UNKNOWN_COMMAND_NAME,
+    NOT_A_PLAYER,
+    MISSING_PERMISSION,
+    ONLY_CONSOLE_COMMAND,
+    ONLY_CONSOLE_ONLY_PLAYER_ERROR,
+    BOTH_CODE_CANNOT_SET,
+    NO_CODE_SET
+}

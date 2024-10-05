@@ -5,51 +5,85 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public interface CMDFWCommand {
 
     /**
-     * If implemented, works like onCommand method
-     * @param commandSender Sender of command
-     * @param command Sender of command
-     * @param cmd Get the command string
-     * @param args Arguments from the player
-     * @return
+     * Executes the main logic for the command.
+     *
+     * @param commandSender The sender of the command (could be console or player).
+     * @param player The player executing the command (null if sent from console).
+     * @param command The actual command being executed.
+     * @param cmd The command string (e.g. "panda").
+     * @param args The arguments provided by the player.
+     * @return true if the command was successfully executed, false otherwise.
      */
-    boolean execute(CommandSender commandSender, Command command, String cmd, String[] args);
+    boolean execute(CommandSender commandSender, Player player, Command command, String cmd, String[] args);
 
     /**
-     * Put down everything that needs to be initialized to the beginn
+     * Initializes the command's necessary configurations.
      * <p>
-     * For example:
-     * subCommand.addChoose("name")
+     * This method is used to set up subcommands, choose options, and other
+     * initial settings that are required at the beginning of the command's lifecycle.
+     * <p>
+     * Example usage:
+     * <pre>
+     * subCommand.addChoose("optionName");
+     * </pre>
      */
     void initialize();
 
     /**
-     * Set the code of a subCommand in this function
-     * @param sender Sender of command
-     * @param player If command executed by player, return player
-     * @param command Sender of command
-     * @param cmd Get the command string
-     * @param args Arguments from the player
+     * Defines the logic for subcommands.
+     *
+     * @param sender The sender of the command.
+     * @param player The player executing the subcommand (null if not applicable).
+     * @param command The command being executed.
+     * @param cmd The string representation of the command.
+     * @param args The arguments provided by the player.
      */
-    void subCommandCode(CommandSender sender,Player player, org.bukkit.command.Command command, String cmd, String[] args);
+    void subCommandCode(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args);
 
     /**
-     * Get the instance of the current command
-     * @return
+     * Gets the instance of the current command framework.
+     *
+     * @return The {@link CommandFramework} instance managing this command.
      */
     CommandFramework getCommandFramework();
 
     /**
-     * Set the permissions for default command method "execute"
-     * @param permission Permission string
+     * Sets the permission required to use the command.
+     *
+     * @param permission The permission string (e.g. "plugin.command.use").
      */
     void setPermission(String permission);
 
     /**
-     * Get the permission from default command
-     * @return Permission for default command
+     * Adds additional settings to the command.
+     *
+     * @param settings The {@link Settings} object defining the configuration to add.
+     */
+    void addSetting(Settings settings);
+
+    /**
+     * Retrieves all settings applied to this command.
+     *
+     * @return A list of {@link Settings} applied to this command.
+     */
+    List<Settings> getSettings();
+
+    /**
+     * Gets the permission string for this command.
+     *
+     * @return The permission required to execute the command.
      */
     String getPermission();
+
+    /**
+     * Gets the name of the command.
+     *
+     * @return The name of the command.
+     */
+    String getName();
 }

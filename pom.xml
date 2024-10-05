@@ -37,6 +37,7 @@
                 <version>2.3.1</version>
                 <configuration>
                     <outputDirectory>C:\Users\Daniel\Desktop\Server\Test 1.20.2\plugins</outputDirectory>
+                    <finalName>CommandFramework</finalName>
                 </configuration>
             </plugin>
             <plugin>

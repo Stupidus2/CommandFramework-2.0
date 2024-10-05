@@ -1,4 +1,4 @@
-package de.stupidus.command;
+package de.stupidus.command.command;
 
 import de.stupidus.subCommand.SubCommand;
 
