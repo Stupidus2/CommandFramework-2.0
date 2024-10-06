@@ -23,11 +23,11 @@ import java.util.jar.JarFile;
 
 public class Initializer {
     private List<String> packageList = new ArrayList<>();
-    private List<Class<?>> classes = null;
     private HashMap<Command, Boolean> containsExecute = new HashMap<>();
 
     public void register(JavaPlugin plugin) {
         updateClass(null);
+        Bukkit.getConsoleSender().sendMessage("§c"+packageList);
         if (plugin != null) {
             for (Command command : CommandFramework.getCommands()) {
                 plugin.getCommand(command.getName()).setExecutor(command);
@@ -40,10 +40,9 @@ public class Initializer {
 
     public void updateClass(String className) {
         for (String packageName : packageList) {
+            List<Class<?>> classes;
             try {
-                if (classes == null) {
-                    classes = getClassesFromJar(packageName);
-                }
+                classes = getClassesFromJar(packageName);
                 for (Class<?> clazz : classes) {
                     if (clazz.isAnnotationPresent(Initialize.class)) {
                         if (className == null || clazz.getName().equalsIgnoreCase(className)) {
@@ -51,6 +50,7 @@ public class Initializer {
                             for (Method method : clazz.getMethods()) {
                                 if (method.getName().equalsIgnoreCase("initialize")) {
                                     invokeMethod(method, instance);
+                                    Bukkit.getConsoleSender().sendMessage("§b"+clazz.getName());
                                 }
                             }
                         }
@@ -114,16 +114,12 @@ public class Initializer {
         }
     }
 
-    private boolean checkIfMethodIsOverridden(Class<?> baseClass, Class<?> subClass, String methodName) {
+    public boolean checkIfMethodIsOverridden(Class<?> baseClass, Class<?> subClass, String methodName) {
         try {
             Method baseMethod = baseClass.getDeclaredMethod(methodName, CommandSender.class, Player.class, org.bukkit.command.Command.class, String.class, String[].class);
             Method subMethod = subClass.getDeclaredMethod(methodName, CommandSender.class, Player.class, org.bukkit.command.Command.class, String.class, String[].class);
 
-            if (!baseMethod.equals(subMethod)) {
-                return true;
-            } else {
-                return false;
-            }
+            return !baseMethod.equals(subMethod);
         } catch (NoSuchMethodException e) {
             return false;
         }

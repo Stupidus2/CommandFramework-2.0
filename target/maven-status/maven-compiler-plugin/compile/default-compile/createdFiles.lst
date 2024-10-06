@@ -2,13 +2,14 @@ de\stupidus\main\Main.class
 de\stupidus\api\CMDFWSubCommand.class
 de\stupidus\api\CMDFWSyntax.class
 de\stupidus\api\Initialize.class
+de\stupidus\traceCMD\TestCMD.class
 de\stupidus\tabCompleter\CustomTabCompleter.class
 de\stupidus\messages\Translator.class
+de\stupidus\commands\Panda$1.class
 de\stupidus\subCommand\SubCommand.class
 de\stupidus\messages\Translation.class
 de\stupidus\command\others\CommandUtils.class
 de\stupidus\framework\initializer\Initializer.class
-de\stupidus\commands\TestExternTab.class
 de\stupidus\command\command\CommandManager.class
 de\stupidus\command\command\Command.class
 de\stupidus\framework\CommandFramework.class
