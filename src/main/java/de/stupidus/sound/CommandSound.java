@@ -13,7 +13,7 @@ public class CommandSound implements CMDFWCommandSound {
     }
 
     @Override
-    public void setFailSound(Sound sound) {
+    public void setFailureSound(Sound sound) {
         failureSound = sound;
     }
 

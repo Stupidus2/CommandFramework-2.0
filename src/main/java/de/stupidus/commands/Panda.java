@@ -19,6 +19,11 @@ public class Panda extends Command {
     }
 
     @Override
+    public boolean execute(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args) {
+        return super.execute(sender, player, command, cmd, args);
+    }
+
+    @Override
     public void initialize() {
         save.addSetting(Settings.PLAYER);
         addSetting(Settings.COMMAND_SYNTAX);
@@ -29,9 +34,7 @@ public class Panda extends Command {
     }
 
     @Override
-    public void subCommandCode(CommandSender sender, Player player, org.bukkit.command.Command command, String s, String[] args) {
-        save.setCode(() -> panda(sender));
-    }
+    public void subCommandCode(CommandSender sender, Player player, org.bukkit.command.Command command, String s, String[] args) {}
 
     public void panda(CommandSender sender) {
         sender.sendMessage("Test");

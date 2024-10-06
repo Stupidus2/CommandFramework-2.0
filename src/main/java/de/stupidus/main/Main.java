@@ -1,6 +1,7 @@
 package de.stupidus.main;
 
 import de.stupidus.command.syntax.Syntax;
+import de.stupidus.sound.CommandSound;
 import de.stupidus.framework.CommandFramework;
 import de.stupidus.framework.initializer.Initializer;
 import org.bukkit.ChatColor;
@@ -25,6 +26,8 @@ public class Main extends JavaPlugin {
 
         syntaxCreator.setSyntaxPattern(ChatColor.RED+"<command>"+ChatColor.BLUE+"<arg>");
         syntaxCreator.setSyntaxPattern("Use of Command <command>", "Hallo",ChatColor.RED+"<command>"+ChatColor.BLUE+"<arg>");
+
+        CommandSound sound = CommandFramework.getCommandSound();
 
     }
 }

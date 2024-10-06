@@ -22,7 +22,7 @@ public interface CMDFWCommandSound {
      *              {@link org.bukkit.Sound} class.
      *              For example, {@link org.bukkit.Sound#ENTITY_ELDER_GUARDIAN_CURSE}.
      */
-    void setFailSound(Sound sound);
+    void setFailureSound(Sound sound);
 
     /**
      * Retrieves the sound that is set to play for a successful event.

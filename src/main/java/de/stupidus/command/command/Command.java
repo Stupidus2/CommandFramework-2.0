@@ -78,7 +78,7 @@ public abstract class Command extends BaseCommand {
         }
         //SYNTAX IMPLEMENT / NO COMMAND FOUND MSG
 
-        if (getSettings().contains(Settings.SOUND) && sender instanceof Player)
+        if (getSettings().contains(Settings.SOUND) && sender instanceof Player && commandSound.getFailureSound() != null)
             ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getFailureSound(), 1.0f, 1.0f);
 
         if (getSettings().contains(Settings.COMMAND_SYNTAX)) {
@@ -131,7 +131,7 @@ public abstract class Command extends BaseCommand {
             if (runnableCode != null) {
                 runnableCode.run();
             }
-            if (getSettings().contains(Settings.SOUND) && sender instanceof Player)
+            if (getSettings().contains(Settings.SOUND) && sender instanceof Player && commandSound.getFailureSound() != null)
                 ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getSuccessSound(), 1.0f, 1.0f);
             return true;
         }
