@@ -131,7 +131,7 @@ public abstract class Command extends BaseCommand {
             if (runnableCode != null) {
                 runnableCode.run();
             }
-            if (getSettings().contains(Settings.SOUND) && sender instanceof Player && commandSound.getFailureSound() != null)
+            if (getSettings().contains(Settings.SOUND) && sender instanceof Player && commandSound.getSuccessSound() != null)
                 ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getSuccessSound(), 1.0f, 1.0f);
             return true;
         }
