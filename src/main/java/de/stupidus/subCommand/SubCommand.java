@@ -59,7 +59,7 @@ public class SubCommand implements CMDFWSubCommand {
 
     public List<String> cleanChoose() {
         List<String> tempNameList = nameList;
-        nameList.clear();
+        nameList = new ArrayList<>();
         return tempNameList;
     }
 
