@@ -57,6 +57,12 @@ public class SubCommand implements CMDFWSubCommand {
         nameList = nameList.stream().distinct().collect(Collectors.toList());
     }
 
+    public List<String> cleanChoose() {
+        List<String> tempNameList = nameList;
+        nameList.clear();
+        return tempNameList;
+    }
+
     @Override
     public boolean containsVarArg() {
         return !varArg.isEmpty();
