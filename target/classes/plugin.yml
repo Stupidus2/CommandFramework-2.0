@@ -4,6 +4,3 @@ version: 1.0
 
 commands:
   panda:
-    description: ""
-  test:
-    description: ""

@@ -50,7 +50,6 @@ public class Initializer {
                             for (Method method : clazz.getMethods()) {
                                 if (method.getName().equalsIgnoreCase("initialize")) {
                                     invokeMethod(method, instance);
-                                    Bukkit.getConsoleSender().sendMessage("§b" + clazz.getName());
                                 }
                             }
                         }

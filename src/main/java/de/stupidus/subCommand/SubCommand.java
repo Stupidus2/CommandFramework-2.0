@@ -50,6 +50,19 @@ public class SubCommand implements CMDFWSubCommand {
             }
         }
     }
+    public void removeChoose(String name) {
+        if (nameList.contains(name)) {
+            nameList.remove(name);
+
+            List<String> varArgList = Arrays.stream(name.split(" "))
+                    .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
+                    .collect(Collectors.toList());
+
+            if (!varArgList.isEmpty()) {
+                varArg.remove(name);
+            }
+        }
+    }
 
     // UTIL FUNCTIONS
     @Override
