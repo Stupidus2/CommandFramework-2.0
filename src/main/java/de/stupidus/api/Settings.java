@@ -4,5 +4,6 @@ public enum Settings {
     PLAYER,
     ONLY_CONSOLE_EXECUTABLE,
     COMMAND_SYNTAX,
-    SOUND
+    SOUND,
+    SYNTAX_CLICKABLE
 }

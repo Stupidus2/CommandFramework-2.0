@@ -83,7 +83,7 @@ public abstract class Command extends BaseCommand {
 
         if (getSettings().contains(Settings.COMMAND_SYNTAX)) {
             initialize();
-            syntaxCreator.sendSyntax(sender, getName() + " " + commandString);
+            syntaxCreator.sendSyntax(sender, getName() + " " + commandString, getSettings().contains(Settings.SYNTAX_CLICKABLE));
             return true;
         }
         sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender));

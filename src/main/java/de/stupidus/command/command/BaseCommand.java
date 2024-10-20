@@ -41,6 +41,10 @@ public abstract class BaseCommand implements CMDFWCommand, TabCompleter, Command
         return settings;
     }
 
+    public List<SubCommand> getSubCommands() {
+        return subCommands;
+    }
+
     @Override
     public void addSetting(Settings settings) {
         this.settings.add(settings);

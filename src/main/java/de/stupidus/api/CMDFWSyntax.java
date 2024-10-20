@@ -1,5 +1,6 @@
 package de.stupidus.api;
 
+import de.stupidus.command.command.Command;
 import org.bukkit.command.CommandSender;
 
 
@@ -48,7 +49,7 @@ public interface CMDFWSyntax {
      *                         This could be a player, console.
      * @param fullCommandString The full command string.
      */
-    void sendSyntax(CommandSender sender, String fullCommandString);
+    void sendSyntax(CommandSender sender, String fullCommandString, boolean clickable);
 
     /**
      * Replaces the argument at position <code>argsLength</code> in the
@@ -57,5 +58,5 @@ public interface CMDFWSyntax {
      * @param argsLength the required number of arguments
      * @param replacement the new value for the argument
      */
-    void replaceArg(String commandName, int argsLength, String replacement);
+    void replaceArg(Command command, String subCommandName,  int argsLength, String replacement);
 }

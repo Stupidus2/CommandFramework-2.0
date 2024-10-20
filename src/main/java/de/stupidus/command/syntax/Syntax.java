@@ -1,18 +1,24 @@
 package de.stupidus.command.syntax;
 
 import de.stupidus.api.CMDFWSyntax;
+import de.stupidus.command.command.Command;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
 
 public class Syntax implements CMDFWSyntax {
-    private String syntaxPattern = ChatColor.RED+"<command>"+ChatColor.YELLOW+"<arg>";
-    private String headPattern = ChatColor.RED+"Usage:";
+    private String syntaxPattern = ChatColor.RED + "<command>" + ChatColor.YELLOW + "<arg>";
+    private String headPattern = ChatColor.RED + "Usage:";
     private String bottomPattern = null;
     private HashMap<String, List<String>> commandStrings = new HashMap<>();
     private HashMap<String, List<String>> finalCommandStrings = new HashMap<>();
     private int currentSizeList;
+    private String hoverPattern = "§e<command><arg>";
 
 
     //SET SYNTAX PATTERN
@@ -21,6 +27,11 @@ public class Syntax implements CMDFWSyntax {
     public void setSyntaxPattern(String syntax) {
         syntaxPattern = syntax;
     }
+
+    public void setHoverPattern(String hover) {
+        this.hoverPattern = hover;
+    }
+
     @Override
     public void setSyntaxPattern(String headline, String bottomLine, String syntax) {
         bottomPattern = bottomLine;
@@ -55,19 +66,26 @@ public class Syntax implements CMDFWSyntax {
     //GET SYNTAX AND SEND
 
     @Override
-    public void sendSyntax(CommandSender sender, String fullCommandString) {
+    public void sendSyntax(CommandSender sender, String fullCommandString, boolean clickable) {
         String[] commandArray = fullCommandString.split(" ");
         String[] syntaxArray = getSyntax(fullCommandString).split("\n");
 
         //SEND HEADLINE MESSAGE
-        if (headPattern != null) sender.sendMessage(headPattern.replace("<command>", "/"+commandArray[0]));
+        if (headPattern != null) sender.sendMessage(headPattern.replace("<command>", "/" + commandArray[0]));
 
-        for (String s: syntaxArray) {
-            sender.sendMessage(syntaxPattern.replace("<command>", "/"+commandArray[0]).replace("<arg>", s));
+        for (String s : syntaxArray) {
+            if (clickable) {
+                TextComponent message = new TextComponent(syntaxPattern.replace("<command>", "/" + commandArray[0]).replace("<arg>", s));
+                message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + commandArray[0] + s));
+                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverPattern.replace("<command>", "/"+commandArray[0]).replace("<arg>", s))));
+                sender.spigot().sendMessage(message);
+            } else {
+              sender.sendMessage(syntaxPattern.replace("<command>", "/" + commandArray[0]).replace("<arg>", s));
+            }
         }
 
         //SEND BOTTOM MESSAGE
-        if (bottomPattern != null) sender.sendMessage(bottomPattern.replace("<command>", "/"+commandArray[0]));
+        if (bottomPattern != null) sender.sendMessage(bottomPattern.replace("<command>", "/" + commandArray[0]));
 
     }
 
@@ -78,46 +96,49 @@ public class Syntax implements CMDFWSyntax {
         StringBuilder result = new StringBuilder();
         if (finalCommandStrings.containsKey(commandArray[0])) {
             if (commandArray.length > 1) {
-                for (String s: finalCommandStrings.get(commandArray[0])) {
+                for (String s : finalCommandStrings.get(commandArray[0])) {
                     String[] commandStringArray = s.split(" ");
                     if (commandStringArray[0].equalsIgnoreCase(commandArray[1])) {
 
                         //RESULT arg > 1
 
-                        for (String ss: commandStringArray) {
+                        for (String ss : commandStringArray) {
                             result.append(" ").append(ss);
                         }
                         result.append("\n");
-                        return result.toString();
                     }
                 }
+                return result.toString();
             }
 
             //RESULT arg < 1 OR ARG[0] NOT FOUND
 
-            for (String s: finalCommandStrings.get(commandArray[0])) {
+            for (String s : finalCommandStrings.get(commandArray[0])) {
                 result.append(" ").append(s).append("\n");
             }
             return result.toString();
         }
         return "";
     }
+
     @Override
-    public void replaceArg(String commandName, int argsLength, String replacement) {
+    public void replaceArg(Command command, String replacedSubCommand, int argsLength, String replacement) {
         setCommandStringFinal();
 
         String[] sArray;
         List<String> tempList = new ArrayList<>();
-        if (finalCommandStrings.containsKey(commandName)) {
-            for (String s : finalCommandStrings.get(commandName)) {
+        if (finalCommandStrings.containsKey(command.getName())) {
+            for (String s : finalCommandStrings.get(command.getName())) {
                 sArray = s.split(" ");
-                if (sArray.length >= argsLength) {
-                    sArray[argsLength - 1] = replacement;
+                if (s.equalsIgnoreCase(replacedSubCommand)) {
+                    if (sArray.length >= argsLength) {
+                        sArray[argsLength - 1] = replacement;
+                    }
                 }
                 tempList.add(String.join(" ", sArray));
             }
-            finalCommandStrings.remove(commandName);
-            finalCommandStrings.putIfAbsent(commandName, clearDuplicates(tempList));
+            finalCommandStrings.remove(command.getName());
+            finalCommandStrings.putIfAbsent(command.getName(), clearDuplicates(tempList));
         }
     }
 
@@ -130,6 +151,7 @@ public class Syntax implements CMDFWSyntax {
         }
         return new ArrayList<>(filteredList);
     }
+
     private void setCommandStringFinal() {
         if (!(currentSizeList == commandStrings.size())) {
             finalCommandStrings = commandStrings;

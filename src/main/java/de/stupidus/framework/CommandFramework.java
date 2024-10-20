@@ -54,6 +54,14 @@ public class CommandFramework {
     public static List<Command> getCommands() {
         return commandName;
     }
+    public static Command getCommand(String nameCommand) {
+        for (Command command : commandName) {
+            if (command.getName().equalsIgnoreCase(nameCommand)) {
+                return command;
+            }
+        }
+        return null;
+    }
 
 
     //Non-static methods
