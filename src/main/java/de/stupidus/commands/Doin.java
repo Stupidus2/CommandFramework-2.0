@@ -5,10 +5,6 @@ import de.stupidus.api.Settings;
 import de.stupidus.command.command.Command;
 import de.stupidus.command.syntax.Syntax;
 import de.stupidus.framework.CommandFramework;
-import de.stupidus.messages.Message;
-import de.stupidus.messages.Messages;
-import de.stupidus.messages.Translation;
-import de.stupidus.messages.Translator;
 import de.stupidus.subCommand.SubCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -21,6 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class Doin extends Command {
 
     SubCommand subCommand = new SubCommand(getCommandFramework(), null, true);
+    SubCommand testibus = new SubCommand(getCommandFramework(), null, true);
 
     @Override
     public boolean execute(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args) {
@@ -40,16 +37,17 @@ public class Doin extends Command {
         addSetting(Settings.COMMAND_SYNTAX);
         subCommand.setPermission("sfdghasdgh");
         Syntax syntax = CommandFramework.getSyntax();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            subCommand.addChoose(player.getName());
-            syntax.replaceArg(this, player.getName(), 1, "player");
-        }
 
+        subCommand.addChoose("start asdfsfd");
+        subCommand.addChoose("start asdfsfd");
         subCommand.addChoose("start asdfsfd");
         subCommand.addChoose("start sdgsgbdh");
         subCommand.addChoose("stop sdgfsdf");
-        subCommand.addChoose("asgfsdg");
+        subCommand.addChoose("asgfsdg d");
+        testibus.addChoose("testibus muss getestet werden vertrau");
+        testibus.addChoose("jaja");
         addSetting(Settings.SYNTAX_CLICKABLE);
+        syntax.replaceArg(this, subCommand, 2, "player");
     }
 
     @Override

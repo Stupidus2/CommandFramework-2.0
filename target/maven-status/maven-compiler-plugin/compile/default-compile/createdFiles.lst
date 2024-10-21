@@ -16,10 +16,10 @@ de\stupidus\api\CMDFWCommandSound.class
 de\stupidus\api\Settings.class
 de\stupidus\api\CMDFWMessage.class
 de\stupidus\command\others\Code.class
+de\stupidus\commands\Doin.class
 de\stupidus\api\CMDFWCommand.class
 de\stupidus\api\CMDFWMessageManager.class
 de\stupidus\framework\initializer\MessageInitializer.class
-de\stupidus\commands\Panda.class
 de\stupidus\messages\Messages.class
 de\stupidus\command\command\BaseCommand.class
 de\stupidus\command\syntax\Syntax.class

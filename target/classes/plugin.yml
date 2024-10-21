@@ -1,6 +1,7 @@
 name: CommandFramework
-main: de.stupidus.main.Main
 version: 1.0
+main: de.stupidus.main.Main
 
 commands:
-  panda:
+  doin:
+    description: ""

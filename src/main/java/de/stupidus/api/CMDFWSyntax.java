@@ -1,6 +1,7 @@
 package de.stupidus.api;
 
 import de.stupidus.command.command.Command;
+import de.stupidus.subCommand.SubCommand;
 import org.bukkit.command.CommandSender;
 
 
@@ -58,5 +59,5 @@ public interface CMDFWSyntax {
      * @param argsLength the required number of arguments
      * @param replacement the new value for the argument
      */
-    void replaceArg(Command command, String subCommandName,  int argsLength, String replacement);
+    void replaceArg(Command command, SubCommand subCommand, int argsLength, String replacement);
 }
