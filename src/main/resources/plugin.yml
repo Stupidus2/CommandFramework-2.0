@@ -1,7 +1,0 @@
-name: CommandFramework
-version: 1.0
-main: de.stupidus.main.Main
-
-commands:
-  doin:
-    description: ""
