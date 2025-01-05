@@ -9,7 +9,6 @@ import de.stupidus.framework.CommandFramework;
 import de.stupidus.api.Settings;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,7 +57,7 @@ public abstract class Command extends BaseCommand {
 
                 String[] nameArray = name.split(" ");
 
-                boolean isMatch = subCommand.containsVarArg() && args.length == nameArray.length || name.equalsIgnoreCase(commandString);
+                boolean isMatch = subCommand.containsVarArg() && args.length == nameArray.length && name.equalsIgnoreCase(commandString);
                 if (!isMatch) continue;
 
                 List<Integer> argLengthList = CommandUtils.generateArgLengthList(name);
