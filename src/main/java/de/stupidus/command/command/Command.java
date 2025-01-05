@@ -58,7 +58,7 @@ public abstract class Command extends BaseCommand {
                 String[] nameArray = name.split(" ");
                 if (subCommand.containsVarArg()) {
                     for (int i = 0; i < nameArray.length; i++) {
-                        if (nameArray[i].startsWith("<[") && nameArray[i].endsWith("]>")) {
+                        if (i < args.length && nameArray[i].startsWith("<[") && nameArray[i].endsWith("]>")) {
                             nameArray[i] = args[i];
                         }
                     }
