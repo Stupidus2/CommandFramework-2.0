@@ -9,6 +9,7 @@ import de.stupidus.framework.CommandFramework;
 import de.stupidus.api.Settings;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public abstract class Command extends BaseCommand {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
         if (args.length == 0) {
             if (initializer.containsExecuteMethod(this)) {
-                initialize();
+                if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
                 return checkCommand(sender, command, s, args);
             }
         }
@@ -39,10 +40,18 @@ public abstract class Command extends BaseCommand {
         String commandString = String.join(" ", args);
 
         for (SubCommand subCommand : subCommands) {
-            subCommand.filterChoose();
-            initialize();
+            if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
 
-            for (String name : subCommand.getNameList()) {
+            for (String name : subCommand.getNameList().keySet()) {
+                if (!subCommand.getNameList().get(name).isEmpty()) {
+                    if (!(sender instanceof Player)) {
+                        continue;
+                    }
+                    Player player = (Player) sender;
+                    if (!subCommand.getNameList().get(name).contains(player.getUniqueId())) {
+                        continue;
+                    }
+                }
 
                 if (name == null) continue;
                 if (!syntaxCreator.contains(getName() + " " + name)) syntaxCreator.addCommandString(getName() + " " + name);
@@ -82,7 +91,7 @@ public abstract class Command extends BaseCommand {
             ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getFailureSound(), 1.0f, 1.0f);
 
         if (getSettings().contains(Settings.COMMAND_SYNTAX)) {
-            initialize();
+            if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
             syntaxCreator.sendSyntax(sender, getName() + " " + commandString, getSettings().contains(Settings.SYNTAX_CLICKABLE));
             return true;
         }

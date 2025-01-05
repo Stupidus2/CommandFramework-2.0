@@ -5,10 +5,9 @@ import de.stupidus.api.Settings;
 import de.stupidus.command.others.Code;
 import de.stupidus.command.command.CommandManager;
 import de.stupidus.framework.CommandFramework;
-import org.bukkit.command.Command;
+import org.bukkit.Bukkit;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SubCommand implements CMDFWSubCommand {
@@ -21,7 +20,7 @@ public class SubCommand implements CMDFWSubCommand {
     private String permission;
     private final List<Settings> settings = new ArrayList<>();
     private final Map<String, List<String>> varArg = new HashMap<>();
-    private List<String> nameList = new ArrayList<>();
+    private HashMap<String, List<UUID>> nameList = new HashMap<>();
     private Runnable runnableCode;
 
     // CONSTRUCTOR
@@ -37,8 +36,9 @@ public class SubCommand implements CMDFWSubCommand {
     // ADD CHOOSE (TO EXECUTE SUBCOMMAND)
     @Override
     public void addChoose(String name) {
-        if (name != null && !nameList.contains(name)) {
-            nameList.add(name);
+        if (name != null && !nameList.containsKey(name)) {
+            List<UUID> uuidList = new ArrayList<>();
+            nameList.putIfAbsent(name, uuidList);
 
             // Check if subCommand args contain <[ ]> and store in list
             List<String> varArgList = Arrays.stream(name.split(" "))
@@ -50,8 +50,33 @@ public class SubCommand implements CMDFWSubCommand {
             }
         }
     }
+    @Override
+    public void addChoose(String name, UUID uuid) {
+        if (name != null && !nameList.containsKey(name)) {
+            List<UUID> uuidList = new ArrayList<>();
+            uuidList.add(uuid);
+            nameList.putIfAbsent(name, uuidList);
+
+            // Check if subCommand args contain <[ ]> and store in list
+            List<String> varArgList = Arrays.stream(name.split(" "))
+                    .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
+                    .collect(Collectors.toList());
+
+            if (!varArgList.isEmpty()) {
+                varArg.putIfAbsent(name, varArgList);
+            }
+        }
+    }
+    public void addAccess(String nameSubCommand, UUID uuid) {
+        if (nameList.get(nameSubCommand) == null || nameList.get(nameSubCommand).contains(uuid)) return;
+        nameList.get(nameSubCommand).add(uuid);
+    }
+    public void removeAccess(String nameSubCommand, UUID uuid) {
+        if (nameList.get(nameSubCommand) == null) return;
+        nameList.get(nameSubCommand).remove(uuid);
+    }
     public void removeChoose(String name) {
-        if (nameList.contains(name)) {
+        if (nameList.containsKey(name)) {
             nameList.remove(name);
 
             List<String> varArgList = Arrays.stream(name.split(" "))
@@ -66,14 +91,11 @@ public class SubCommand implements CMDFWSubCommand {
 
     // UTIL FUNCTIONS
     @Override
-    public void filterChoose() {
-        nameList = nameList.stream().distinct().collect(Collectors.toList());
-    }
+    @Deprecated()
+    public void filterChoose() {}
 
-    public List<String> cleanChoose() {
-        List<String> tempNameList = nameList;
-        nameList = new ArrayList<>();
-        return tempNameList;
+    public void cleanChoose() {
+        nameList = new HashMap<>();
     }
 
     @Override
@@ -124,7 +146,7 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     @Override
-    public List<String> getNameList() {
+    public HashMap<String, List<UUID>> getNameList() {
         return nameList;
     }
 

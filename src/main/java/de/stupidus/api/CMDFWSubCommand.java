@@ -1,10 +1,10 @@
 package de.stupidus.api;
 
 import de.stupidus.command.others.Code;
-import de.stupidus.command.syntax.Syntax;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.UUID;
 
 public interface CMDFWSubCommand {
 
@@ -15,6 +15,16 @@ public interface CMDFWSubCommand {
      *             Example: "spawn panda" or "panda".
      */
     void addChoose(String name);
+
+    /**
+     * Adds an alternative way to execute a subcommand, providing a different string to trigger the subcommand.
+     *
+     * @param name The alternative string (or phrase) that can be used to execute the subcommand.
+     *             Example: "spawn panda" or "panda".
+     *
+     * @param uuid Player who can execute the command
+     */
+    void addChoose(String name, UUID uuid);
 
     /**
      * Adds specific settings or parameters to the subcommand.
@@ -34,9 +44,9 @@ public interface CMDFWSubCommand {
     void setPermission(String permission);
 
     /**
-     * Filters and removes duplicate entries from the list of alternative executions for the subcommand.
-     * This ensures that each alternative is unique.
+     * FOR REMOVE
      */
+    @Deprecated
     void filterChoose();
 
     /**
@@ -91,7 +101,7 @@ public interface CMDFWSubCommand {
      * @return A list of strings representing all possible ways to trigger the subcommand.
      *         Example: ["spawn panda", "panda"].
      */
-    List<String> getNameList();
+    HashMap<String, List<UUID>> getNameList();
 
     /**
      * Retrieves the permission required to execute the subcommand.

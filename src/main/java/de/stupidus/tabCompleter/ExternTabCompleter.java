@@ -5,10 +5,8 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class ExternTabCompleter implements TabCompleter {
+public class ExternTabCompleter extends TabCompleterSuper implements TabCompleter {
 
     private final List<String> tabCompletes;
     private final String permission;
@@ -90,12 +88,4 @@ public class ExternTabCompleter implements TabCompleter {
             }
         return tabComplete;
     }
-    private List<Integer> generateArgLengthList(String subCommandName) {
-        String[] subCommandArray = subCommandName.split(" ");
-        return IntStream.range(0, subCommandArray.length)
-                .filter(i -> subCommandArray[i].startsWith("<[") && subCommandArray[i].endsWith("]>"))
-                .boxed()
-                .collect(Collectors.toList());
-    }
-
 }

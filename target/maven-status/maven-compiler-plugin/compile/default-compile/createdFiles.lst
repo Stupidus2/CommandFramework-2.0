@@ -5,6 +5,7 @@ de\stupidus\api\Initialize.class
 de\stupidus\tabCompleter\CustomTabCompleter.class
 de\stupidus\messages\Translator.class
 de\stupidus\subCommand\SubCommand.class
+de\stupidus\tabCompleter\TabCompleterSuper.class
 de\stupidus\messages\Translation.class
 de\stupidus\command\others\CommandUtils.class
 de\stupidus\framework\initializer\Initializer.class

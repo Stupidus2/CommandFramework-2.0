@@ -7,7 +7,6 @@ import de.stupidus.framework.CommandFramework;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -26,7 +25,10 @@ public class Initializer {
     private List<String> packageList = new ArrayList<>();
     private HashMap<Command, Boolean> containsExecute = new HashMap<>();
 
+    private static JavaPlugin plugin1 = null;
+
     public void register(JavaPlugin plugin) {
+        plugin1 = plugin;
         updateClass(null);
         Bukkit.getConsoleSender().sendMessage("§c"+packageList);
         if (plugin != null) {
@@ -126,5 +128,9 @@ public class Initializer {
     }
     public boolean containsExecuteMethod(Command command) {
         return containsExecute.get(command);
+    }
+
+    public static JavaPlugin getJavaPlugin() {
+        return plugin1;
     }
 }

@@ -1,15 +1,17 @@
 package de.stupidus.tabCompleter;
 
+import de.stupidus.messages.Messages;
 import de.stupidus.subCommand.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class CustomTabCompleter implements TabCompleter {
+public class CustomTabCompleter extends TabCompleterSuper implements TabCompleter {
     private final List<SubCommand> subCommands;
 
     public CustomTabCompleter(List<SubCommand> subCommands) {
@@ -25,8 +27,18 @@ public class CustomTabCompleter implements TabCompleter {
 
                     boolean containsVarArg = subCommand.containsVarArg();
 
-                    for (String name : subCommand.getNameList()) {
+                    for (String name : subCommand.getNameList().keySet()) {
                         if (name != null) {
+
+                            if (!subCommand.getNameList().get(name).isEmpty()) {
+                                if (!(sender instanceof Player)) {
+                                    continue;
+                                }
+                                if (!subCommand.getNameList().get(name).contains(((Player) sender).getUniqueId())) {
+                                    continue;
+                                }
+                            }
+
                             String[] subParts = name.split(" ");
                             int commandLength = subParts.length;
                             List<Integer> argList = generateArgLengthList(name);
@@ -94,12 +106,5 @@ public class CustomTabCompleter implements TabCompleter {
             }
         }
         return tabComplete;
-    }
-    private List<Integer> generateArgLengthList(String subCommandName) {
-        String[] subCommandArray = subCommandName.split(" ");
-        return IntStream.range(0, subCommandArray.length)
-                .filter(i -> subCommandArray[i].startsWith("<[") && subCommandArray[i].endsWith("]>"))
-                .boxed()
-                .collect(Collectors.toList());
     }
 }

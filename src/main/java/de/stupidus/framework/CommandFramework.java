@@ -9,6 +9,8 @@ import de.stupidus.command.command.CommandManager;
 import de.stupidus.messages.Message;
 import de.stupidus.messages.Translator;
 import de.stupidus.sound.CommandSound;
+import de.stupidus.subCommand.SubCommand;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -61,6 +63,21 @@ public class CommandFramework {
             }
         }
         return null;
+    }
+
+    public void removeCommandChoose(String commandName, String chooseToDelete) {
+        for (Command command : CommandFramework.getCommands()) {
+            if (!command.getName().equalsIgnoreCase(commandName)) continue;
+
+            for (SubCommand subCommand : command.getSubCommands()) {
+                for (String subCommandName : subCommand.getNameList().keySet()) {
+                    if (!subCommandName.equalsIgnoreCase(chooseToDelete)) {
+                        subCommand.removeChoose(chooseToDelete);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 

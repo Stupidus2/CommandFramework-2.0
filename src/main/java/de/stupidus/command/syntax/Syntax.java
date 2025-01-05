@@ -139,7 +139,7 @@ public class Syntax implements CMDFWSyntax {
         if (finalCommandStrings.containsKey(command.getName())) {
             for (String s : finalCommandStrings.get(command.getName())) {
                 sArray = s.split(" ");
-                if (subCommand.getNameList().contains(s)) {
+                if (subCommand.getNameList().containsKey(s)) {
                     if (sArray.length >= argsLength) {
                         sArray[argsLength - 1] = replacement;
                     }

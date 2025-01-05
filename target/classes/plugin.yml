@@ -1,7 +1,8 @@
-name: CommandFramework
-version: 1.0
+name: CMDFW
 main: de.stupidus.main.Main
+version: 1.0
+api-version: 1.20
 
 commands:
   doin:
-    description: ""
+    description:
