@@ -18,7 +18,7 @@ public class SubCommand implements CMDFWSubCommand {
     private Code code;
     private String permission;
     private final List<Settings> settings = new ArrayList<>();
-    private final Map<String, List<String>> varArg = new HashMap<>();
+    private final HashMap<String, List<String>> varArg = new HashMap<>();
     private HashMap<String, List<UUID>> nameList = new HashMap<>();
     private Runnable runnableCode;
 

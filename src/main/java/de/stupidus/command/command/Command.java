@@ -56,8 +56,16 @@ public abstract class Command extends BaseCommand {
                 if (!syntaxCreator.contains(getName() + " " + name)) syntaxCreator.addCommandString(getName() + " " + name);
 
                 String[] nameArray = name.split(" ");
+                if (subCommand.containsVarArg()) {
+                    for (int i = 0; i < nameArray.length; i++) {
+                        if (nameArray[i].startsWith("<[") && nameArray[i].endsWith("]>")) {
+                            nameArray[i] = args[i];
+                        }
+                    }
+                }
+                String nameArrayString = String.join(" ", nameArray);
 
-                boolean isMatch = subCommand.containsVarArg() && args.length == nameArray.length && name.equalsIgnoreCase(commandString);
+                boolean isMatch = args.length == nameArray.length && nameArrayString.equalsIgnoreCase(commandString);
                 if (!isMatch) continue;
 
                 List<Integer> argLengthList = CommandUtils.generateArgLengthList(name);
