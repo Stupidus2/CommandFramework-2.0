@@ -64,6 +64,15 @@ public class Initializer {
         }
     }
 
+    public void updateTabCompleter(String nameCommand) {
+        Command command = CommandFramework.getCommand(nameCommand);
+        if (command != null) {
+            command.getTabCompleter().updateSubCommands(command.getSubCommands());
+        } else {
+            Bukkit.getConsoleSender().sendMessage("§cupdateTabCompleter: §a" + nameCommand);
+            Bukkit.getConsoleSender().sendMessage("§cCommand is null!");
+        }
+    }
     private List<Class<?>> getClassesFromJar(String packageName) throws Exception {
         List<Class<?>> classes = new ArrayList<>();
         String path = packageName.replace('.', '/');

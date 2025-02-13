@@ -1,6 +1,5 @@
 package de.stupidus.tabCompleter;
 
-import de.stupidus.messages.Messages;
 import de.stupidus.subCommand.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -8,11 +7,9 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class CustomTabCompleter extends TabCompleterSuper implements TabCompleter {
-    private final List<SubCommand> subCommands;
+    private List<SubCommand> subCommands;
 
     public CustomTabCompleter(List<SubCommand> subCommands) {
         this.subCommands = subCommands;
@@ -106,5 +103,8 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
             }
         }
         return tabComplete;
+    }
+    public void updateSubCommands(List<SubCommand> subCommands) {
+        this.subCommands = subCommands;
     }
 }
