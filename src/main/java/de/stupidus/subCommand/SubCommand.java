@@ -74,6 +74,10 @@ public class SubCommand implements CMDFWSubCommand {
         if (nameList.get(nameSubCommand) == null) return;
         nameList.get(nameSubCommand).remove(uuid);
     }
+
+    public boolean hasAnyoneAccess(String nameSubCommand) {
+        return nameList.get(nameSubCommand).isEmpty() || nameList.get(nameSubCommand) == null;
+    }
     public void removeChoose(String name) {
         if (nameList.containsKey(name)) {
             nameList.remove(name);
