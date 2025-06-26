@@ -1,7 +1,4 @@
 name: CMDFW
-main: de.stupidus.main.Main
+main: de.stupidus.test.Main
 version: 1.0
-api-version: 1.20
-
-commands:
-  doin:
+api-version: 1.21

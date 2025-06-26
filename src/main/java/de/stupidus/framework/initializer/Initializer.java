@@ -7,10 +7,13 @@ import de.stupidus.framework.CommandFramework;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,16 +32,24 @@ public class Initializer {
     public void register(JavaPlugin plugin) {
         plugin1 = plugin;
         updateClass(null);
-        Bukkit.getConsoleSender().sendMessage("§c"+packageList);
         if (plugin != null) {
-            for (Command command : CommandFramework.getCommands()) {
 
+            List<Command> copy = new ArrayList<>(CommandFramework.getCommands());
+
+            for (Command command : copy) {
                 CommandMap map = getCommandMap();
-                map.register(command.getName(), command);
-                setTabCompleter(command);
+
+                Bukkit.getConsoleSender().sendMessage("§a"+command.getName());
+                Bukkit.getConsoleSender().sendMessage("§a"+command.getSubCommands().get(0).getNameList());
+
+                PluginCommand pc = createPluginCommand(command.getName(), plugin);
+                pc.setExecutor(command);                   // damit execute() läuft
+                pc.setTabCompleter(command);               // damit onTabComplete() läuft
+                registerCommand(pc);
+
                 Bukkit.getPluginManager().registerEvents(command, plugin);
 
-                containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "execute"));
+                containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "onCommandCustom"));
             }
         }
     }
@@ -154,14 +165,23 @@ public class Initializer {
         }
     }
 
-    private void setTabCompleter(org.bukkit.command.Command command) {
+    public static PluginCommand createPluginCommand(String name, JavaPlugin plugin) {
         try {
-            Field completerField = org.bukkit.command.Command.class.getDeclaredField("completer");
-            completerField.setAccessible(true);
-            if (command instanceof org.bukkit.command.Command) {
-                completerField.set(command, command);
-            }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Constructor<PluginCommand> c = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            c.setAccessible(true);
+            return c.newInstance(name, plugin);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static void registerCommand(PluginCommand command) {
+        try {
+            Field f = Bukkit.getPluginManager().getClass().getDeclaredField("commandMap");
+            f.setAccessible(true);
+            CommandMap map = (CommandMap) f.get(Bukkit.getPluginManager());
+            map.register(command.getName(), command);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

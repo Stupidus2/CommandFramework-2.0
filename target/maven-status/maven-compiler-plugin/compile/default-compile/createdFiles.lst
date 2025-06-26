@@ -12,6 +12,7 @@ de\stupidus\command\command\CommandManager.class
 de\stupidus\command\command\Command.class
 de\stupidus\framework\CommandFramework.class
 de\stupidus\messages\Message.class
+de\stupidus\test\TestCommand.class
 de\stupidus\api\CMDFWCommandSound.class
 de\stupidus\api\Settings.class
 de\stupidus\api\CMDFWMessage.class
@@ -22,6 +23,7 @@ de\stupidus\framework\initializer\MessageInitializer.class
 de\stupidus\messages\Messages.class
 de\stupidus\command\command\BaseCommand.class
 de\stupidus\command\syntax\Syntax.class
+de\stupidus\test\Main.class
 de\stupidus\tabCompleter\ExternTabCompleter.class
 de\stupidus\sound\CommandSound.class
 de\stupidus\messages\MessageManager.class

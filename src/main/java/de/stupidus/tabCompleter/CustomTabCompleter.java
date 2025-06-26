@@ -1,6 +1,7 @@
 package de.stupidus.tabCompleter;
 
 import de.stupidus.subCommand.SubCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
@@ -102,6 +103,7 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                 }
             }
         }
+        Bukkit.broadcastMessage(tabComplete.toString());
         return tabComplete;
     }
     public void updateSubCommands(List<SubCommand> subCommands) {

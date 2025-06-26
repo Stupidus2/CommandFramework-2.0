@@ -55,7 +55,6 @@ public interface CMDFWSyntax {
     /**
      * Replaces the argument at position <code>argsLength</code> in the
      * command string.
-     * @param commandName the name of the command
      * @param argsLength the required number of arguments
      * @param replacement the new value for the argument
      */

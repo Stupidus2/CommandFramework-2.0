@@ -1,6 +1,7 @@
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\messages\MessageManager.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\BaseCommand.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\Command.java
+C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\TestCommand.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\messages\Messages.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\Initialize.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\sound\CommandSound.java
@@ -11,6 +12,7 @@ C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\j
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\framework\CommandFramework.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\subCommand\SubCommand.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\Settings.java
+C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\Main.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\tabCompleter\CustomTabCompleter.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWCommandSound.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\syntax\Syntax.java

@@ -9,8 +9,10 @@ import de.stupidus.framework.CommandFramework;
 import de.stupidus.api.Settings;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -27,8 +29,10 @@ public abstract class Command extends BaseCommand {
 
 
     //COMMAND SYSTEM
+
+
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (args.length == 0) {
             if (initializer.containsExecuteMethod(this)) {
                 if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
@@ -106,7 +110,6 @@ public abstract class Command extends BaseCommand {
         return true;
     }
 
-
     //CHECK COMMAND
     private boolean checkCommand(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
 
@@ -117,7 +120,7 @@ public abstract class Command extends BaseCommand {
             Player player = sender instanceof Player ? (Player) sender:null;
 
             //INITIALIZE COMMAND
-            execute(sender, player, command, s, args);
+            onCommandCustom(sender, player, command, s, args);
             if (getSettings().contains(Settings.SOUND) && sender instanceof Player)
                 ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getSuccessSound(), 1.0f, 1.0f);
             return true;

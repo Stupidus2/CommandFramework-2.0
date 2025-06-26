@@ -19,7 +19,7 @@ public interface CMDFWCommand {
      * @param args The arguments provided by the player.
      * @return true if the command was successfully executed, false otherwise.
      */
-    boolean execute(CommandSender commandSender, Player player, Command command, String cmd, String[] args);
+    boolean onCommandCustom(CommandSender commandSender, Player player, Command command, String cmd, String[] args);
 
     /**
      * Initializes the command's necessary configurations.

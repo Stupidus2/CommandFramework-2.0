@@ -7,15 +7,17 @@ import de.stupidus.framework.initializer.Initializer;
 import de.stupidus.subCommand.SubCommand;
 import de.stupidus.tabCompleter.CustomTabCompleter;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseCommand extends Command implements CMDFWCommand, TabCompleter, Listener {
+public abstract class BaseCommand extends Command implements CMDFWCommand, TabCompleter, Listener, CommandExecutor {
 
     //VARIABLES AND CONSTRUCTOR
     protected CommandFramework commandFramework;
@@ -88,7 +90,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, TabCo
     @Override
     public abstract void subCommandCode(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args);
     @Override
-    public boolean execute(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args) {
+    public boolean onCommandCustom(CommandSender sender, Player player, org.bukkit.command.Command command, String cmd, String[] args) {
         return true;
     }
 
@@ -105,6 +107,8 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, TabCo
         this.description = description;
     }
 
-    //COMMAND SYSTEM
-    public abstract boolean onCommand(CommandSender sender, Command command, String s, String[] args);
+    @Override
+    public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+        return true;
+    }
 }
