@@ -5,19 +5,18 @@ import de.stupidus.api.Initialize;
 import de.stupidus.command.command.Command;
 import de.stupidus.framework.CommandFramework;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -33,9 +32,12 @@ public class Initializer {
         Bukkit.getConsoleSender().sendMessage("§c"+packageList);
         if (plugin != null) {
             for (Command command : CommandFramework.getCommands()) {
-                plugin.getCommand(command.getName()).setExecutor(command);
-                plugin.getCommand(command.getName()).setTabCompleter(command);
+
+                CommandMap map = getCommandMap();
+                map.register(command.getName(), command);
+                Objects.requireNonNull(plugin.getCommand(command.getName())).setTabCompleter(command);
                 Bukkit.getPluginManager().registerEvents(command, plugin);
+
                 containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "execute"));
             }
         }
@@ -141,5 +143,14 @@ public class Initializer {
 
     public static JavaPlugin getJavaPlugin() {
         return plugin1;
+    }
+    private CommandMap getCommandMap() {
+        try {
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            return (CommandMap) commandMapField.get(Bukkit.getServer());
+        } catch (Exception e) {
+            throw new RuntimeException("Konnte CommandMap nicht abrufen", e);
+        }
     }
 }

@@ -57,7 +57,7 @@ public interface CMDFWCommand {
      *
      * @param permission The permission string (e.g. "plugin.command.use").
      */
-    void setPermission(String permission);
+    void setCommandPermission(String permission);
 
     /**
      * Adds additional settings to the command.
