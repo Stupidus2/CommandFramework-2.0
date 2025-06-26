@@ -35,7 +35,7 @@ public class Initializer {
 
                 CommandMap map = getCommandMap();
                 map.register(command.getName(), command);
-                Objects.requireNonNull(plugin.getCommand(command.getName())).setTabCompleter(command);
+                setTabCompleter(command);
                 Bukkit.getPluginManager().registerEvents(command, plugin);
 
                 containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "execute"));
@@ -151,6 +151,18 @@ public class Initializer {
             return (CommandMap) commandMapField.get(Bukkit.getServer());
         } catch (Exception e) {
             throw new RuntimeException("Konnte CommandMap nicht abrufen", e);
+        }
+    }
+
+    private void setTabCompleter(org.bukkit.command.Command command) {
+        try {
+            Field completerField = org.bukkit.command.Command.class.getDeclaredField("completer");
+            completerField.setAccessible(true);
+            if (command instanceof org.bukkit.command.Command) {
+                completerField.set(command, command);
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }
