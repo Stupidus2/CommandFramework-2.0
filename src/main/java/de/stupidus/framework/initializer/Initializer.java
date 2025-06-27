@@ -37,14 +37,10 @@ public class Initializer {
             List<Command> copy = new ArrayList<>(CommandFramework.getCommands());
 
             for (Command command : copy) {
-                CommandMap map = getCommandMap();
-
-                Bukkit.getConsoleSender().sendMessage("§a"+command.getName());
-                Bukkit.getConsoleSender().sendMessage("§a"+command.getSubCommands().get(0).getNameList());
 
                 PluginCommand pc = createPluginCommand(command.getName(), plugin);
-                pc.setExecutor(command);                   // damit execute() läuft
-                pc.setTabCompleter(command);               // damit onTabComplete() läuft
+                pc.setExecutor(command);
+                pc.setTabCompleter(command);
                 registerCommand(pc);
 
                 Bukkit.getPluginManager().registerEvents(command, plugin);

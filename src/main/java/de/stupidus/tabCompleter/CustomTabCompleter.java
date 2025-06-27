@@ -103,7 +103,6 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                 }
             }
         }
-        Bukkit.broadcastMessage(tabComplete.toString());
         return tabComplete;
     }
     public void updateSubCommands(List<SubCommand> subCommands) {
