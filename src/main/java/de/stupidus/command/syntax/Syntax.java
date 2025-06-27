@@ -7,19 +7,18 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
 
 public class Syntax implements CMDFWSyntax {
-    private String syntaxPattern = ChatColor.RED + "/<command>" + ChatColor.YELLOW + "<arg>";
-    private String headPattern = ChatColor.RED + "Usage:";
+    private String syntaxPattern = "§c" + "/<command>" + "§e" + "<arg>";
+    private String headPattern = "§c" + "Usage:";
     private String bottomPattern = null;
     private HashMap<String, List<String>> commandStrings = new HashMap<>();
     private HashMap<String, List<String>> finalCommandStrings = new HashMap<>();
     private int currentSizeList;
-    private String hoverPattern = ChatColor.YELLOW + "/<command><arg>";
+    private String hoverPattern = "§e" + "/<command><arg>";
 
 
     //SET SYNTAX PATTERN
