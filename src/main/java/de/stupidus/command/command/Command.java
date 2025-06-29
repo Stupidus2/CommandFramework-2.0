@@ -9,7 +9,6 @@ import de.stupidus.framework.CommandFramework;
 import de.stupidus.api.Settings;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,11 +31,11 @@ public abstract class Command extends BaseCommand {
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String s, @NotNull String[] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
         if (args.length == 0) {
             if (initializer.containsExecuteMethod(this)) {
                 if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
-                return checkCommand(sender, command, s, args);
+                return checkCommand(sender, this, s, args);
             }
         }
 
@@ -89,10 +88,10 @@ public abstract class Command extends BaseCommand {
                     }
 
                     if (argumentsMatch) {
-                        return checkSubCommand(sender, subCommand, command, s, args);
+                        return checkSubCommand(sender, subCommand, this, s, args);
                     }
                 } else if (args.length == commandLength && (args[commandLength - 1].equalsIgnoreCase(name) || subCommand.containsVarArg())) {
-                    return checkSubCommand(sender, subCommand, command, s, args);
+                    return checkSubCommand(sender, subCommand, this, s, args);
                 }
             }
         }

@@ -16,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class BaseCommand extends Command implements CMDFWCommand, TabCompleter, Listener, CommandExecutor {
+public abstract class BaseCommand extends Command implements CMDFWCommand, Listener {
 
     //VARIABLES AND CONSTRUCTOR
     protected CommandFramework commandFramework;
@@ -63,7 +64,18 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, TabCo
     @Override
     public void setCommandPermission(String permission) {
         this.permission = permission;
+        setPermission(permission);
     }
+    public void setCommandAliases(List<String> aliases) {
+        this.aliases = aliases;
+        setAliases(aliases);
+    }
+
+    public void setCommandDescription(String description) {
+        this.description = description;
+        setDescription(description);
+    }
+
 
     @Override
     public String getPermission() {
@@ -95,20 +107,9 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, TabCo
     }
 
     //TAB COMPLETER
-    @Override
-    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
-        return commandTabCompleter.onTabComplete(sender, command, s, args);
-    }
-    public void setCommandAliases(List<String> aliases) {
-        this.aliases = aliases;
-    }
-
-    public void setCommandDescription(String description) {
-        this.description = description;
-    }
 
     @Override
-    public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
-        return true;
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        return Objects.requireNonNull(commandTabCompleter.onTabComplete(sender, this, alias, args));
     }
 }

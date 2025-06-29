@@ -12,6 +12,7 @@ import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class CommandFramework {
@@ -23,6 +24,7 @@ public class CommandFramework {
     private static CommandSound commandSound;
     private CommandManager commandManager;
     private static final List<Command> commandName = new ArrayList<>();
+    private static final Map<String, Command> commandsByClass = new HashMap<>();
     public CommandFramework() {}
 
     //Static methods
@@ -91,5 +93,39 @@ public class CommandFramework {
     }
     public void addCommand(Command command) {
         commandName.add(command);
+        commandsByClass.put(command.getClass().getName(), command);
+    }
+
+
+
+    // SubCommand Reflection
+
+
+    public static Command getCommandByClassName(String className) {
+        return commandsByClass.get(className);
+    }
+
+    public static SubCommand getSubCommand(Command command, String fieldName) {
+        try {
+            Field field = command.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Object value = field.get(command);
+            if (value instanceof SubCommand) {
+                return (SubCommand) value;
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void setSubCommand(Command command, String fieldName, SubCommand subCommand) {
+        try {
+            Field field = command.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(command, subCommand);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

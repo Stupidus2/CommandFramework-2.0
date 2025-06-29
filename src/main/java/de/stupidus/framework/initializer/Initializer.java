@@ -38,10 +38,10 @@ public class Initializer {
 
             for (Command command : copy) {
 
-                PluginCommand pc = createPluginCommand(command.getName(), plugin);
-                pc.setExecutor(command);
-                pc.setTabCompleter(command);
-                registerCommand(pc);
+                CommandMap map = getCommandMap();
+                if (map.getCommand(command.getName()) == null) {
+                    map.register(command.getName(), command);
+                }
 
                 Bukkit.getPluginManager().registerEvents(command, plugin);
 

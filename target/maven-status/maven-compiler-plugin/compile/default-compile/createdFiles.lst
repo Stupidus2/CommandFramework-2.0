@@ -14,14 +14,17 @@ de\stupidus\framework\CommandFramework.class
 de\stupidus\messages\Message.class
 de\stupidus\api\CMDFWCommandSound.class
 de\stupidus\api\Settings.class
+de\stupidus\test\TestCMD.class
 de\stupidus\api\CMDFWMessage.class
 de\stupidus\command\others\Code.class
 de\stupidus\api\CMDFWCommand.class
 de\stupidus\api\CMDFWMessageManager.class
 de\stupidus\framework\initializer\MessageInitializer.class
+de\stupidus\test\TestCMDNew.class
 de\stupidus\messages\Messages.class
 de\stupidus\command\command\BaseCommand.class
 de\stupidus\command\syntax\Syntax.class
+de\stupidus\test\Main.class
 de\stupidus\tabCompleter\ExternTabCompleter.class
 de\stupidus\sound\CommandSound.class
 de\stupidus\messages\MessageManager.class
