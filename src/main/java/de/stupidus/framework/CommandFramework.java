@@ -28,6 +28,7 @@ public class CommandFramework {
     private CommandManager commandManager;
     private static final List<BaseCommand> commandName = new ArrayList<>();
     private static final Map<String, Object> commandsByClass = new HashMap<>();
+
     public CommandFramework() {}
 
     //Static methods

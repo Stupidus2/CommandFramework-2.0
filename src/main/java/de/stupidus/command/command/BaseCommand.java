@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public abstract class BaseCommand extends Command implements CMDFWCommand, Listener {
 
@@ -35,6 +36,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
     protected Initializer initializer = CommandFramework.getInitializer();
     protected List<String> aliases = null;
     protected String description = null;
+    protected String usage;
     protected String className;
 
     public BaseCommand(String name) {
@@ -200,6 +202,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
             //INITIALIZING SUBCOMMANDS
             Code code = subCommand.getCode();
             Runnable runnableCode = subCommand.getRunnableCode();
+            Consumer<CommandBuilder> consumerCode = subCommand.getConsumerCode();
 
             //INITIALIZE
 
@@ -208,6 +211,8 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
             }
             if (runnableCode != null) {
                 runnableCode.run();
+            } else if (consumerCode != null) {
+                consumerCode.accept(subCommand.getCommandBuilder());
             }
             if (getSettings().contains(Settings.SOUND) && sender instanceof Player && commandSound.getSuccessSound() != null)
                 ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getSuccessSound(), 1.0f, 1.0f);

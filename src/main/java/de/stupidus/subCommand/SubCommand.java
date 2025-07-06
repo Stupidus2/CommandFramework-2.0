@@ -8,6 +8,7 @@ import de.stupidus.command.command.CommandManager;
 import de.stupidus.framework.CommandFramework;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SubCommand implements CMDFWSubCommand {
@@ -23,6 +24,7 @@ public class SubCommand implements CMDFWSubCommand {
     private CommandBuilder commandBuilder;
     private HashMap<String, List<UUID>> nameList = new HashMap<>();
     private Runnable runnableCode;
+    private Consumer<CommandBuilder> consumerCode;
 
     // CONSTRUCTOR
     public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete) {
@@ -187,6 +189,10 @@ public class SubCommand implements CMDFWSubCommand {
         this.runnableCode = code;
         return this;
     }
+    public SubCommand setCode(Consumer<CommandBuilder> code) {
+        this.consumerCode = code;
+        return this;
+    }
 
     @Override
     public Code getCode() {
@@ -196,6 +202,9 @@ public class SubCommand implements CMDFWSubCommand {
     @Override
     public Runnable getRunnableCode() {
         return runnableCode;
+    }
+    public Consumer<CommandBuilder> getConsumerCode() {
+        return consumerCode;
     }
 
     @Override

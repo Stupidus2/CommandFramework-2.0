@@ -33,6 +33,10 @@ public abstract class Command extends BaseCommand {
         this.description = description;
         setDescription(description);
     }
+    public void setCommandUsage(String usage) {
+        this.usage = usage;
+        setUsage(usage);
+    }
 
 
     @Override
