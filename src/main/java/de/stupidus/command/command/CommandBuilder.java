@@ -25,8 +25,9 @@ public class CommandBuilder extends BaseCommand {
         commandFramework.addCommand(this, this);
     }
 
-    public void build(Object instance) {
+    public CommandBuilder build(Object instance) {
         commandFramework.addCommand(this, instance);
+        return this;
     }
 
 
@@ -67,6 +68,16 @@ public class CommandBuilder extends BaseCommand {
 
     public SubCommand createSubCommand(String name, boolean tabCompletable) {
         return new SubCommand(this.getCommandFramework(), name, tabCompletable);
+    }
+
+    public SubCommand createSubCommand(List<String> nameList, boolean tabCompletable, Runnable code) {
+        SubCommand subCommand = new SubCommand(this.getCommandFramework(), nameList, tabCompletable);
+        subCommand.setCode(code);
+        return subCommand;
+    }
+
+    public SubCommand createSubCommand(List<String> nameList, boolean tabCompletable) {
+        return new SubCommand(this.getCommandFramework(), nameList, tabCompletable);
     }
 
 

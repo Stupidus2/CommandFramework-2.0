@@ -2,6 +2,7 @@ package de.stupidus.subCommand;
 
 import de.stupidus.api.CMDFWSubCommand;
 import de.stupidus.api.Settings;
+import de.stupidus.command.command.CommandBuilder;
 import de.stupidus.command.others.Code;
 import de.stupidus.command.command.CommandManager;
 import de.stupidus.framework.CommandFramework;
@@ -19,15 +20,33 @@ public class SubCommand implements CMDFWSubCommand {
     private String permission;
     private final List<Settings> settings = new ArrayList<>();
     private final HashMap<String, List<String>> varArg = new HashMap<>();
+    private CommandBuilder commandBuilder;
     private HashMap<String, List<UUID>> nameList = new HashMap<>();
     private Runnable runnableCode;
 
     // CONSTRUCTOR
     public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete) {
+        this(commandFramework, name, tabComplete, null);
+    }
+    public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete, CommandBuilder commandBuilder) {
         this.commandFramework = commandFramework;
         this.commandManager = this.commandFramework.getCommandManager();
+        this.commandBuilder = commandBuilder;
 
         addChoose(name);
+        this.tabComplete = tabComplete;
+        commandManager.addSubCommand(this);
+    }
+
+    public SubCommand(CommandFramework commandFramework, List<String> nameList, boolean tabComplete) {
+        this(commandFramework, nameList, tabComplete, null);
+    }
+    public SubCommand(CommandFramework commandFramework, List<String> nameList, boolean tabComplete, CommandBuilder commandBuilder) {
+        this.commandFramework = commandFramework;
+        this.commandManager = this.commandFramework.getCommandManager();
+        this.commandBuilder = commandBuilder;
+
+        for (String name : nameList) addChoose(name);
         this.tabComplete = tabComplete;
         commandManager.addSubCommand(this);
     }
@@ -170,5 +189,8 @@ public class SubCommand implements CMDFWSubCommand {
     @Override
     public boolean getTabCompletable() {
         return tabComplete;
+    }
+    public CommandBuilder getCommandBuilder() {
+       return commandBuilder;
     }
 }
