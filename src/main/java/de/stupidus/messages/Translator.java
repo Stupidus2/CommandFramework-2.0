@@ -1,6 +1,5 @@
 package de.stupidus.messages;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -30,7 +29,7 @@ public class Translator {
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.RED+"You have to set a german and english translator");
+            sender.sendMessage("§cYou have to set a german and english translator");
         }
     }
 
@@ -42,7 +41,7 @@ public class Translator {
 
             player.sendMessage(message);
         } else {
-            player.sendMessage(ChatColor.RED+"You have to set a german and english translator");
+            player.sendMessage("§cYou have to set a german and english translator");
         }
     }
     public static void setConsoleLanguage(Translation translation) {
@@ -78,7 +77,7 @@ public class Translator {
             }
             return translatedMessage.get("en");
         }
-        return ChatColor.RED+"You have to set a german and english translator";
+        return "§cYou have to set a german and english translator";
     }
 
     public String getTranslatedMessage(Player player) {
@@ -89,6 +88,6 @@ public class Translator {
 
             return translatedMessage.get(message);
         }
-        return ChatColor.RED+"You have to set a german and english translator";
+        return "§cYou have to set a german and english translator";
     }
 }
