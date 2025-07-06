@@ -61,23 +61,23 @@ public class CommandBuilder extends BaseCommand {
 
 
     public SubCommand createSubCommand(String name, boolean tabCompletable, Runnable code) {
-        SubCommand subCommand = new SubCommand(this.getCommandFramework(), name, tabCompletable);
+        SubCommand subCommand = new SubCommand(this.getCommandFramework(), name, tabCompletable,this);
         subCommand.setCode(code);
         return subCommand;
     }
 
     public SubCommand createSubCommand(String name, boolean tabCompletable) {
-        return new SubCommand(this.getCommandFramework(), name, tabCompletable);
+        return new SubCommand(this.getCommandFramework(), name, tabCompletable, this);
     }
 
     public SubCommand createSubCommand(List<String> nameList, boolean tabCompletable, Runnable code) {
-        SubCommand subCommand = new SubCommand(this.getCommandFramework(), nameList, tabCompletable);
+        SubCommand subCommand = new SubCommand(this.getCommandFramework(), nameList, tabCompletable, this);
         subCommand.setCode(code);
         return subCommand;
     }
 
     public SubCommand createSubCommand(List<String> nameList, boolean tabCompletable) {
-        return new SubCommand(this.getCommandFramework(), nameList, tabCompletable);
+        return new SubCommand(this.getCommandFramework(), nameList, tabCompletable, this);
     }
 
 

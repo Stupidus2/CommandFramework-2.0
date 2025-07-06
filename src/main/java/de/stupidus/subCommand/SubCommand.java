@@ -70,6 +70,28 @@ public class SubCommand implements CMDFWSubCommand {
         }
         return this;
     }
+
+    public SubCommand addChoose(List<String> nameList) {
+        for (String name : nameList) {
+
+            if (name != null && !this.nameList.containsKey(name)) {
+                List<UUID> uuidList = new ArrayList<>();
+                this.nameList.putIfAbsent(name, uuidList);
+
+                // Check if subCommand args contain <[ ]> and store in list
+
+                List<String> varArgList = Arrays.stream(name.split(" "))
+                        .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
+                        .collect(Collectors.toList());
+
+                if (!varArgList.isEmpty()) {
+                    varArg.putIfAbsent(name, varArgList);
+                }
+            }
+        }
+        return this;
+    }
+
     @Override
     public SubCommand addChoose(String name, UUID uuid) {
         if (name != null && !nameList.containsKey(name)) {
