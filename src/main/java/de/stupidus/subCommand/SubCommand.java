@@ -34,12 +34,13 @@ public class SubCommand implements CMDFWSubCommand {
 
     // ADD CHOOSE (TO EXECUTE SUBCOMMAND)
     @Override
-    public void addChoose(String name) {
+    public SubCommand addChoose(String name) {
         if (name != null && !nameList.containsKey(name)) {
             List<UUID> uuidList = new ArrayList<>();
             nameList.putIfAbsent(name, uuidList);
 
             // Check if subCommand args contain <[ ]> and store in list
+
             List<String> varArgList = Arrays.stream(name.split(" "))
                     .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
                     .collect(Collectors.toList());
@@ -48,9 +49,10 @@ public class SubCommand implements CMDFWSubCommand {
                 varArg.putIfAbsent(name, varArgList);
             }
         }
+        return this;
     }
     @Override
-    public void addChoose(String name, UUID uuid) {
+    public SubCommand addChoose(String name, UUID uuid) {
         if (name != null && !nameList.containsKey(name)) {
             List<UUID> uuidList = new ArrayList<>();
             uuidList.add(uuid);
@@ -65,20 +67,23 @@ public class SubCommand implements CMDFWSubCommand {
                 varArg.putIfAbsent(name, varArgList);
             }
         }
+        return this;
     }
-    public void addAccess(String nameSubCommand, UUID uuid) {
-        if (nameList.get(nameSubCommand) == null || nameList.get(nameSubCommand).contains(uuid)) return;
+    public SubCommand addAccess(String nameSubCommand, UUID uuid) {
+        if (nameList.get(nameSubCommand) == null || nameList.get(nameSubCommand).contains(uuid)) return this;
         nameList.get(nameSubCommand).add(uuid);
+        return this;
     }
-    public void removeAccess(String nameSubCommand, UUID uuid) {
-        if (nameList.get(nameSubCommand) == null) return;
+    public SubCommand removeAccess(String nameSubCommand, UUID uuid) {
+        if (nameList.get(nameSubCommand) == null) return this;
         nameList.get(nameSubCommand).remove(uuid);
+        return this;
     }
 
-    public boolean hasAnyoneAccess(String nameSubCommand) {
+    public boolean hasEveryoneAccess(String nameSubCommand) {
         return nameList.get(nameSubCommand).isEmpty() || nameList.get(nameSubCommand) == null;
     }
-    public void removeChoose(String name) {
+    public SubCommand removeChoose(String name) {
         if (nameList.containsKey(name)) {
             nameList.remove(name);
 
@@ -90,15 +95,20 @@ public class SubCommand implements CMDFWSubCommand {
                 varArg.remove(name);
             }
         }
+        return this;
     }
+
 
     // UTIL FUNCTIONS
     @Override
     @Deprecated()
-    public void filterChoose() {}
+    public SubCommand filterChoose() {
+        return this;
+    }
 
-    public void cleanChoose() {
+    public SubCommand cleanChoose() {
         nameList = new HashMap<>();
+        return this;
     }
 
     @Override
@@ -108,13 +118,15 @@ public class SubCommand implements CMDFWSubCommand {
 
     // GETTER, SETTER, ADDER
     @Override
-    public void addSetting(Settings setting) {
+    public SubCommand addSetting(Settings setting) {
         settings.add(setting);
+        return this;
     }
 
     @Override
-    public void setPermission(String permission) {
+    public SubCommand setPermission(String permission) {
         this.permission = permission;
+        return this;
     }
 
     @Override
@@ -124,13 +136,15 @@ public class SubCommand implements CMDFWSubCommand {
 
     @Override
     @Deprecated
-    public void setCode(Code codeToExecute) {
+    public SubCommand setCode(Code codeToExecute) {
         this.code = codeToExecute;
+        return this;
     }
 
     @Override
-    public void setCode(Runnable code) {
+    public SubCommand setCode(Runnable code) {
         this.runnableCode = code;
+        return this;
     }
 
     @Override

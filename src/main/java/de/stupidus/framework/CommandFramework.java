@@ -1,19 +1,22 @@
 package de.stupidus.framework;
 
+import de.stupidus.command.command.BaseCommand;
+import de.stupidus.command.command.CommandManager;
 import de.stupidus.command.syntax.Syntax;
 import de.stupidus.framework.initializer.Initializer;
 import de.stupidus.framework.initializer.MessageInitializer;
-import de.stupidus.messages.Messages;
-import de.stupidus.command.command.Command;
-import de.stupidus.command.command.CommandManager;
 import de.stupidus.messages.Message;
+import de.stupidus.messages.Messages;
 import de.stupidus.messages.Translator;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CommandFramework {
 
@@ -23,8 +26,8 @@ public class CommandFramework {
     private static HashMap<Messages, Translator> messages = new HashMap<>();
     private static CommandSound commandSound;
     private CommandManager commandManager;
-    private static final List<Command> commandName = new ArrayList<>();
-    private static final Map<String, Command> commandsByClass = new HashMap<>();
+    private static final List<BaseCommand> commandName = new ArrayList<>();
+    private static final Map<String, Object> commandsByClass = new HashMap<>();
     public CommandFramework() {}
 
     //Static methods
@@ -55,11 +58,11 @@ public class CommandFramework {
         }
         return commandSound;
     }
-    public static List<Command> getCommands() {
+    public static List<BaseCommand> getCommands() {
         return commandName;
     }
-    public static Command getCommand(String nameCommand) {
-        for (Command command : commandName) {
+    public static BaseCommand getCommand(String nameCommand) {
+        for (BaseCommand command : commandName) {
             if (command.getName().equalsIgnoreCase(nameCommand)) {
                 return command;
             }
@@ -68,7 +71,7 @@ public class CommandFramework {
     }
 
     public void removeCommandChoose(String commandName, String chooseToDelete) {
-        for (Command command : CommandFramework.getCommands()) {
+        for (BaseCommand command : CommandFramework.getCommands()) {
             if (!command.getName().equalsIgnoreCase(commandName)) continue;
 
             for (SubCommand subCommand : command.getSubCommands()) {
@@ -91,9 +94,9 @@ public class CommandFramework {
         }
         return commandManager;
     }
-    public void addCommand(Command command) {
+    public void addCommand(BaseCommand command, Object instance) {
         commandName.add(command);
-        commandsByClass.put(command.getClass().getName(), command);
+        commandsByClass.put(command.getCommandClassName(), instance);
     }
 
 
@@ -101,31 +104,55 @@ public class CommandFramework {
     // SubCommand Reflection
 
 
-    public static Command getCommandByClassName(String className) {
+    public static Object getCommandByClassName(String className) {
         return commandsByClass.get(className);
     }
 
-    public static SubCommand getSubCommand(Command command, String fieldName) {
+    public static SubCommand getSubCommand(Object instance, String fieldName) {
         try {
-            Field field = command.getClass().getDeclaredField(fieldName);
+            Field field = findField(instance.getClass(), fieldName);
+
+            if (field == null) {
+                Bukkit.getConsoleSender().sendMessage("§c[CMDFW] Field '" + fieldName + "' not found in class " + instance.getClass().getName());
+                return null;
+            }
             field.setAccessible(true);
-            Object value = field.get(command);
+            Object value = field.get(instance);
+
             if (value instanceof SubCommand) {
                 return (SubCommand) value;
+            } else {
+                Bukkit.getConsoleSender().sendMessage("§c[CMDFW] Field is not a SubCommand in " + instance.getClass().getName());
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
-    public static void setSubCommand(Command command, String fieldName, SubCommand subCommand) {
+    public static void setSubCommand(Object instance, String fieldName, SubCommand subCommand) {
         try {
-            Field field = command.getClass().getDeclaredField(fieldName);
+            Field field = findField(instance.getClass(), fieldName);
+            if (field == null) {
+                Bukkit.getConsoleSender().sendMessage("§c[CMDFW] Field '" + fieldName + "' not found in class " + instance.getClass().getName());
+                return;
+            }
             field.setAccessible(true);
-            field.set(command, subCommand);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            field.set(instance, subCommand);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static Field findField(Class<?> clazz, String fieldName) {
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException ignored) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return null;
     }
 }

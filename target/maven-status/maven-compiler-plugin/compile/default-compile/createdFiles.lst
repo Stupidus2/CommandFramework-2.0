@@ -3,6 +3,7 @@ de\stupidus\api\CMDFWSyntax.class
 de\stupidus\api\Initialize.class
 de\stupidus\tabCompleter\CustomTabCompleter.class
 de\stupidus\messages\Translator.class
+de\stupidus\api\CommandListener.class
 de\stupidus\subCommand\SubCommand.class
 de\stupidus\tabCompleter\TabCompleterSuper.class
 de\stupidus\messages\Translation.class
@@ -12,13 +13,18 @@ de\stupidus\command\command\CommandManager.class
 de\stupidus\command\command\Command.class
 de\stupidus\framework\CommandFramework.class
 de\stupidus\messages\Message.class
+de\stupidus\test\TestCommand.class
 de\stupidus\api\CMDFWCommandSound.class
+de\stupidus\command\command\CommandBuilder.class
 de\stupidus\api\Settings.class
+de\stupidus\test\Main$1.class
 de\stupidus\test\TestCMD.class
 de\stupidus\api\CMDFWMessage.class
 de\stupidus\command\others\Code.class
+de\stupidus\test\CommandEx.class
 de\stupidus\api\CMDFWCommand.class
 de\stupidus\api\CMDFWMessageManager.class
+de\stupidus\api\InitializeMethod.class
 de\stupidus\framework\initializer\MessageInitializer.class
 de\stupidus\test\TestCMDNew.class
 de\stupidus\messages\Messages.class

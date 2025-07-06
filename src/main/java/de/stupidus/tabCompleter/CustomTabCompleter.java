@@ -49,7 +49,11 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                                     char[] lettersSub = strSub.toCharArray();
 
                                     if (containsVarArg && strSub.startsWith("<[") && strSub.endsWith("]>")) {
-                                        tabComplete.add(" ");
+                                        if (strSub.equals("<[]>")) {
+                                            tabComplete.remove(strSub);
+                                        } else {
+                                            tabComplete.add(" ");
+                                        }
                                     }
 
                                     char[] lettersArg = args[0].toCharArray();
@@ -77,7 +81,11 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                                             char[] lettersSub = strSub.toCharArray();
 
                                             if (containsVarArg && strSub.startsWith("<[") && strSub.endsWith("]>")) {
-                                                tabComplete.add("  ");
+                                                if (strSub.equals("<[]>")) {
+                                                    tabComplete.remove(strSub);
+                                                } else {
+                                                    tabComplete.add(" ");
+                                                }
                                             }
 
                                             String strArg = args[i];

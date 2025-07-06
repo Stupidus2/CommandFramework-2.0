@@ -1,6 +1,7 @@
 package de.stupidus.api;
 
 import de.stupidus.command.others.Code;
+import de.stupidus.subCommand.SubCommand;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface CMDFWSubCommand {
      * @param name The alternative string (or phrase) that can be used to execute the subcommand.
      *             Example: "spawn panda" or "panda".
      */
-    void addChoose(String name);
+    SubCommand addChoose(String name);
 
     /**
      * Adds an alternative way to execute a subcommand, providing a different string to trigger the subcommand.
@@ -24,7 +25,7 @@ public interface CMDFWSubCommand {
      *
      * @param uuid Player who can execute the command
      */
-    void addChoose(String name, UUID uuid);
+    SubCommand addChoose(String name, UUID uuid);
 
     /**
      * Adds specific settings or parameters to the subcommand.
@@ -33,7 +34,7 @@ public interface CMDFWSubCommand {
      * @param settings The settings to be applied to the subcommand.
      *                 Example: {@link Settings#PLAYER}, {@link Settings#COMMAND_SYNTAX}.
      */
-    void addSetting(Settings settings);
+    SubCommand addSetting(Settings settings);
 
     /**
      * Sets the required permission for executing the subcommand.
@@ -41,13 +42,13 @@ public interface CMDFWSubCommand {
      * @param permission The permission node required to run the subcommand.
      *                   Example: "myplugin.use.panda".
      */
-    void setPermission(String permission);
+    SubCommand setPermission(String permission);
 
     /**
      * FOR REMOVE
      */
     @Deprecated
-    void filterChoose();
+    SubCommand filterChoose();
 
     /**
      * Checks whether the subcommand contains a variable argument (e.g., placeholders like <[duration]>).
@@ -65,7 +66,7 @@ public interface CMDFWSubCommand {
      * @deprecated Use {@link #setCode(Runnable)} instead for better compatibility with future versions.
      */
     @Deprecated
-    void setCode(Code codeToExecute);
+    SubCommand setCode(Code codeToExecute);
 
     /**
      * Sets the code that will be executed when the subcommand is invoked.
@@ -78,7 +79,7 @@ public interface CMDFWSubCommand {
      *             });
      *             </pre>
      */
-    void setCode(Runnable code);
+    SubCommand setCode(Runnable code);
 
     /**
      * Retrieves the code object associated with the subcommand.

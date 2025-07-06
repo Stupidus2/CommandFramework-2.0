@@ -52,19 +52,6 @@ public interface CMDFWCommand {
      */
     CommandFramework getCommandFramework();
 
-    /**
-     * Sets the permission required to use the command.
-     *
-     * @param permission The permission string (e.g. "plugin.command.use").
-     */
-    void setCommandPermission(String permission);
-
-    /**
-     * Adds additional settings to the command.
-     *
-     * @param settings The {@link Settings} object defining the configuration to add.
-     */
-    void addSetting(Settings settings);
 
     /**
      * Retrieves all settings applied to this command.
