@@ -1,4 +1,5 @@
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\messages\MessageManager.java
+C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\GeneratePluginYML.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\BaseCommand.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\Command.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\TestCommand.java
@@ -8,11 +9,11 @@ C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\j
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\sound\CommandSound.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\messages\Translation.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CommandListener.java
+C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\PluginYMLUtil.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\framework\initializer\MessageInitializer.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\tabCompleter\ExternTabCompleter.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWSubCommand.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\framework\CommandFramework.java
-C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\TestCMDNew.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\subCommand\SubCommand.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\Settings.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\Main.java
@@ -20,16 +21,15 @@ C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\j
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWCommandSound.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\syntax\Syntax.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\CommandManager.java
-C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\TestCMD.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWMessage.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\framework\initializer\Initializer.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\messages\Translator.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\messages\Message.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWCommand.java
-C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\CommandEx.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\others\Code.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\command\CommandBuilder.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\tabCompleter\TabCompleterSuper.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWSyntax.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\api\CMDFWMessageManager.java
+C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\test\Test.java
 C:\Users\Daniel\Desktop\Programmieren\Java\Workspace\CommandFramework\src\main\java\de\stupidus\command\others\CommandUtils.java

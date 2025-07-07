@@ -59,8 +59,7 @@ public class CommandBuilder extends BaseCommand {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
 
     // SUB COMMAND

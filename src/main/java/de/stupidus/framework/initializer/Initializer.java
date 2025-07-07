@@ -37,9 +37,12 @@ public class Initializer {
     private static JavaPlugin plugin1 = null;
 
     public void register(JavaPlugin plugin) {
+
+       // GeneratePluginYML.generate();
+
         plugin1 = plugin;
-        listenerAnnotation();
         updateInitializeMethods();
+        listenerAnnotation();
         executeMethod(null, "initialize", Initialize.class);
         if (plugin != null) {
 
@@ -196,7 +199,7 @@ public class Initializer {
         }
     }
 
-    private void updateInitializeMethods() {
+    public void updateInitializeMethods() {
         for (String packageName : packageList) {
             List<Class<?>> classes;
             try {

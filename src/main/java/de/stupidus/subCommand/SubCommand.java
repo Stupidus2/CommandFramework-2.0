@@ -20,7 +20,7 @@ public class SubCommand implements CMDFWSubCommand {
     private Code code;
     private String permission;
     private final List<Settings> settings = new ArrayList<>();
-    private final HashMap<String, List<String>> varArg = new HashMap<>();
+    private HashMap<String, List<String>> varArg = new HashMap<>();
     private CommandBuilder commandBuilder;
     private HashMap<String, List<UUID>> nameList = new HashMap<>();
     private Runnable runnableCode;
@@ -151,6 +151,7 @@ public class SubCommand implements CMDFWSubCommand {
 
     public SubCommand cleanChoose() {
         nameList = new HashMap<>();
+        varArg = new HashMap<>();
         return this;
     }
 
