@@ -23,6 +23,7 @@ public class SubCommand implements CMDFWSubCommand {
     private HashMap<String, List<String>> varArg = new HashMap<>();
     private CommandBuilder commandBuilder;
     private HashMap<String, List<UUID>> nameList = new HashMap<>();
+    private HashMap<String, List<UUID>> bannedList = new HashMap<>();
     private Runnable runnableCode;
     private Consumer<CommandBuilder> consumerCode;
 
@@ -126,6 +127,24 @@ public class SubCommand implements CMDFWSubCommand {
     public boolean hasEveryoneAccess(String nameSubCommand) {
         return nameList.get(nameSubCommand).isEmpty() || nameList.get(nameSubCommand) == null;
     }
+
+    public SubCommand addBan(String nameSubCommand, UUID uuid) {
+        if (nameList.get(nameSubCommand) == null || bannedList.get(nameSubCommand).contains(uuid)) return this;
+        bannedList.get(nameSubCommand).add(uuid);
+        return this;
+    }
+
+    public SubCommand removeBan(String nameSubCommand, UUID uuid) {
+        if (nameList.get(nameSubCommand) == null || !bannedList.get(nameSubCommand).contains(uuid) || uuid == null) return this;
+        bannedList.get(nameSubCommand).remove(uuid);
+        return this;
+    }
+
+    public boolean isBanned(String nameSubCommand, UUID uuid) {
+        if (!bannedList.containsKey(nameSubCommand)) return false;
+        return bannedList.get(nameSubCommand).contains(uuid);
+    }
+
     public SubCommand removeChoose(String name) {
         if (nameList.containsKey(name)) {
             nameList.remove(name);

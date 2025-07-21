@@ -107,14 +107,11 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
 
             for (String name : subCommand.getNameList().keySet()) {
                 if (!subCommand.getNameList().get(name).isEmpty()) {
-                    if (!(sender instanceof Player)) {
-                        continue;
-                    }
-                    Player player = (Player) sender;
-                    if (!subCommand.getNameList().get(name).contains(player.getUniqueId())) {
-                        continue;
-                    }
+                    if (sender instanceof Player player && !subCommand.getNameList().get(name).contains(player.getUniqueId())) continue;
                 }
+
+                if (subCommand.isBanned(name, sender instanceof  Player player ? player.getUniqueId() : null)) continue;
+
 
                 if (name == null) continue;
                 if (!syntaxCreator.contains(getName() + " " + name))

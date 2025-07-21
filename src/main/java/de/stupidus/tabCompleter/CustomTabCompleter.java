@@ -29,13 +29,10 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                         if (name != null) {
 
                             if (!subCommand.getNameList().get(name).isEmpty()) {
-                                if (!(sender instanceof Player)) {
-                                    continue;
-                                }
-                                if (!subCommand.getNameList().get(name).contains(((Player) sender).getUniqueId())) {
-                                    continue;
-                                }
+                                if (sender instanceof Player player && !subCommand.getNameList().get(name).contains(player.getUniqueId())) continue;
                             }
+
+                            if (subCommand.isBanned(name, sender instanceof  Player player ? player.getUniqueId() : null)) continue;
 
                             String[] subParts = name.split(" ");
                             int commandLength = subParts.length;
