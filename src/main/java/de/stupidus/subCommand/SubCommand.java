@@ -129,7 +129,7 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     public SubCommand addBan(String nameSubCommand, UUID uuid) {
-        if (nameList.get(nameSubCommand) == null || bannedList.get(nameSubCommand).contains(uuid)) return this;
+        if (nameList.get(nameSubCommand) == null || bannedList.containsKey(nameSubCommand) || bannedList.get(nameSubCommand).contains(uuid)) return this;
         bannedList.get(nameSubCommand).add(uuid);
         return this;
     }
@@ -141,7 +141,7 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     public boolean isBanned(String nameSubCommand, UUID uuid) {
-        if (!bannedList.containsKey(nameSubCommand)) return false;
+        if (bannedList != null || !bannedList.containsKey(nameSubCommand)) return false;
         return bannedList.get(nameSubCommand).contains(uuid);
     }
 
