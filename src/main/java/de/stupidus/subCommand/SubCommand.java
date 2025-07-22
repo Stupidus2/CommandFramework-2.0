@@ -147,13 +147,14 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     public boolean isBanned(String nameSubCommand, UUID uuid) {
-        if (bannedList != null || !bannedList.containsKey(nameSubCommand)) return false;
+        if (uuid == null) return false;
         return bannedList.get(nameSubCommand).contains(uuid);
     }
 
     public SubCommand removeChoose(String name) {
         if (nameList.containsKey(name)) {
             nameList.remove(name);
+            bannedList.remove(name);
 
             List<String> varArgList = Arrays.stream(name.split(" "))
                     .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
@@ -177,6 +178,7 @@ public class SubCommand implements CMDFWSubCommand {
     public SubCommand cleanChoose() {
         nameList = new HashMap<>();
         varArg = new HashMap<>();
+        bannedList = new HashMap<>();
         return this;
     }
 
