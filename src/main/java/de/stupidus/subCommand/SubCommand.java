@@ -60,6 +60,8 @@ public class SubCommand implements CMDFWSubCommand {
         if (name != null && !nameList.containsKey(name)) {
             List<UUID> uuidList = new ArrayList<>();
             nameList.putIfAbsent(name, uuidList);
+            ArrayList<UUID> uuidArrayList = new ArrayList<>();
+            bannedList.putIfAbsent(name, uuidArrayList);
 
             // Check if subCommand args contain <[ ]> and store in list
 
@@ -80,6 +82,8 @@ public class SubCommand implements CMDFWSubCommand {
             if (name != null && !this.nameList.containsKey(name)) {
                 List<UUID> uuidList = new ArrayList<>();
                 this.nameList.putIfAbsent(name, uuidList);
+                ArrayList<UUID> uuidArrayList = new ArrayList<>();
+                bannedList.putIfAbsent(name, uuidArrayList);
 
                 // Check if subCommand args contain <[ ]> and store in list
 
@@ -101,6 +105,8 @@ public class SubCommand implements CMDFWSubCommand {
             List<UUID> uuidList = new ArrayList<>();
             uuidList.add(uuid);
             nameList.putIfAbsent(name, uuidList);
+            ArrayList<UUID> uuidArrayList = new ArrayList<>();
+            bannedList.putIfAbsent(name, uuidArrayList);
 
             // Check if subCommand args contain <[ ]> and store in list
             List<String> varArgList = Arrays.stream(name.split(" "))
@@ -129,7 +135,7 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     public SubCommand addBan(String nameSubCommand, UUID uuid) {
-        if (nameList.get(nameSubCommand) == null || bannedList.containsKey(nameSubCommand) || bannedList.get(nameSubCommand).contains(uuid)) return this;
+        if (nameList.get(nameSubCommand) == null || bannedList.get(nameSubCommand).contains(uuid)) return this;
         bannedList.get(nameSubCommand).add(uuid);
         return this;
     }
