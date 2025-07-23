@@ -44,7 +44,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
     protected String description = null;
     protected String usage;
     protected String className;
-    protected boolean normalRegistration;
+    protected boolean normalRegistration = false;
     protected String text;
 
     public BaseCommand(String name) {
