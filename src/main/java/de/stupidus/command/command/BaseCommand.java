@@ -12,18 +12,24 @@ import de.stupidus.messages.Messages;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
 import de.stupidus.tabCompleter.CustomTabCompleter;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-public abstract class BaseCommand extends Command implements CMDFWCommand, Listener {
+public abstract class BaseCommand extends Command implements CMDFWCommand, Listener, CommandExecutor, TabCompleter {
 
     //VARIABLES AND CONSTRUCTOR
     protected CommandFramework commandFramework;
@@ -38,6 +44,8 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
     protected String description = null;
     protected String usage;
     protected String className;
+    protected boolean normalRegistration;
+    protected String text;
 
     public BaseCommand(String name) {
         super(name);
@@ -62,8 +70,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
         for (StackTraceElement element : trace) {
             String className = element.getClassName();
 
-            if (!className.startsWith("java.") && !className.equals("de.stupidus.command.command.CommandBuilder") &&
-                    !className.equals("de.stupidus.command.command.BaseCommand") && !className.equals("de.stupidus.command.command.Command")) {
+            if (!className.startsWith("java.") && !className.equals("de.stupidus.command.command.CommandBuilder") && !className.equals("de.stupidus.command.command.BaseCommand") && !className.equals("de.stupidus.command.command.Command")) {
 
                 this.className = className;
                 break;
@@ -78,11 +85,10 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
     public Class<?> getCommandClass() throws ClassNotFoundException {
         try {
             return Class.forName(className);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
         return null;
     }
-
-
 
 
     // EXECUTE
@@ -92,11 +98,21 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
     private CommandSound commandSound = CommandFramework.getCommandSound();
 
     @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        return commandLogic(args, sender, s, command);
+    }
+
+    @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
+        return commandLogic(args, sender, s, this);
+    }
+
+
+    private boolean commandLogic(String[] args, CommandSender sender, String s, Command command) {
         if (args.length == 0) {
             if (initializer.containsExecuteMethod(this)) {
                 if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
-                return checkCommand(sender, this, s, args);
+                return checkCommand(sender, command, s, args);
             }
         }
 
@@ -106,14 +122,16 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
             if (!settings.contains(Settings.NO_INITIALIZE_UPDATE_ON_COMMAND_EXECUTE)) initialize();
 
             for (String name : subCommand.getNameList().keySet()) {
-                if (!subCommand.getNameList().get(name).isEmpty()) {
-                    if (sender instanceof Player player && !subCommand.getNameList().get(name).contains(player.getUniqueId())) continue;
-                }
-
-                if (subCommand.isBanned(name, sender instanceof  Player player ? player.getUniqueId() : null)) continue;
-
 
                 if (name == null) continue;
+
+                if (!subCommand.getNameList().get(name).isEmpty()) {
+                    if (sender instanceof Player player && !subCommand.getNameList().get(name).contains(player.getUniqueId()))
+                        continue;
+                }
+
+                if (subCommand.isBanned(name, sender instanceof Player player ? player.getUniqueId() : null)) continue;
+
                 if (!syntaxCreator.contains(getName() + " " + name))
                     syntaxCreator.addCommandString(getName() + " " + name);
 
@@ -128,29 +146,49 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
                 String nameArrayString = String.join(" ", nameArray);
 
                 boolean isMatch = args.length == nameArray.length && nameArrayString.equalsIgnoreCase(commandString);
-                if (!isMatch) continue;
+                if (!isMatch && !subCommand.containsText(name)) continue;
 
-                List<Integer> argLengthList = CommandUtils.generateArgLengthList(name);
-                String[] subParts = name.split(" ");
-                int commandLength = subParts.length;
+                // TEXT CHECK
 
-                if (commandLength > 1) {
-                    boolean argumentsMatch = true;
+                if (subCommand.containsText(name)) {
+                    int originLength = nameArray.length - 1;
 
-                    for (int i = 0; i < commandLength; i++) {
-                        if (i >= args.length || !args[i].equalsIgnoreCase(subParts[i])) {
-                            if (subCommand.containsVarArg() && !argLengthList.contains(i)) {
-                                argumentsMatch = false;
-                                break;
+                    if (args.length > originLength) {
+
+                        text = Arrays.stream(args).skip(originLength).collect(Collectors.joining(" "));
+
+                        return checkSubCommand(sender, subCommand, command, s, args);
+                    }
+
+                    // WITHOUT TEXT CHECK
+
+                } else {
+
+                    List<Integer> argLengthList = CommandUtils.generateArgLengthList(name);
+                    String[] subParts = name.split(" ");
+                    int commandLength = subParts.length;
+
+                    if (commandLength > 1) {
+                        boolean argumentsMatch = true;
+
+                        for (int i = 0; i < commandLength; i++) {
+                            if (i >= args.length || !args[i].equalsIgnoreCase(subParts[i])) {
+                                if (subCommand.containsVarArg() && !argLengthList.contains(i)) {
+                                    argumentsMatch = false;
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    if (argumentsMatch) {
-                        return checkSubCommand(sender, subCommand, this, s, args);
+                        if (argumentsMatch) {
+                            return checkSubCommand(sender, subCommand, command, s, args);
+                        }
+                    } else {
+
+                        if (args.length == commandLength && (args[commandLength - 1].equalsIgnoreCase(name) || subCommand.containsVarArg())) {
+                            return checkSubCommand(sender, subCommand, command, s, args);
+                        }
                     }
-                } else if (args.length == commandLength && (args[commandLength - 1].equalsIgnoreCase(name) || subCommand.containsVarArg())) {
-                    return checkSubCommand(sender, subCommand, this, s, args);
                 }
             }
         }
@@ -168,6 +206,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
         sender.sendMessage(message.getMessage(Messages.UNKNOWN_COMMAND_NAME).getTranslatedMessage(sender));
         return true;
     }
+
 
     //CHECK COMMAND
     private boolean checkCommand(CommandSender sender, org.bukkit.command.Command command, String s, String[] args) {
@@ -215,15 +254,12 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
                 ((Player) sender).playSound(((Player) sender).getLocation(), commandSound.getSuccessSound(), 1.0f, 1.0f);
             return true;
         }
+        text = null;
         return true;
     }
 
 
-
-
     //ABSTRACT METHODS
-
-
 
 
     @Override
@@ -238,9 +274,7 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
     }
 
 
-
     // GETTER
-
 
 
     public List<SubCommand> getSubCommands() {
@@ -261,15 +295,25 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
         return commandTabCompleter;
     }
 
+    public boolean getNormalRegistration() {
+        return normalRegistration;
+    }
 
+    public String getText() {
+        return text;
+    }
 
 
     //TAB COMPLETER
 
 
-
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
         return Objects.requireNonNull(commandTabCompleter.onTabComplete(sender, this, alias, args));
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        return Objects.requireNonNull(commandTabCompleter.onTabComplete(sender, command, s, args));
     }
 }

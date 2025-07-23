@@ -21,6 +21,7 @@ public class SubCommand implements CMDFWSubCommand {
     private String permission;
     private final List<Settings> settings = new ArrayList<>();
     private HashMap<String, List<String>> varArg = new HashMap<>();
+    private List<String> text = new ArrayList<>();
     private CommandBuilder commandBuilder;
     private HashMap<String, List<UUID>> nameList = new HashMap<>();
     private HashMap<String, List<UUID>> bannedList = new HashMap<>();
@@ -63,6 +64,13 @@ public class SubCommand implements CMDFWSubCommand {
             ArrayList<UUID> uuidArrayList = new ArrayList<>();
             bannedList.putIfAbsent(name, uuidArrayList);
 
+
+            // CHECK FOR TEXT
+
+            String[] nameArray = name.split(" ");
+            if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]")) text.add(name);
+
+
             // Check if subCommand args contain <[ ]> and store in list
 
             List<String> varArgList = Arrays.stream(name.split(" "))
@@ -84,6 +92,13 @@ public class SubCommand implements CMDFWSubCommand {
                 this.nameList.putIfAbsent(name, uuidList);
                 ArrayList<UUID> uuidArrayList = new ArrayList<>();
                 bannedList.putIfAbsent(name, uuidArrayList);
+
+
+                // CHECK FOR TEXT
+
+                String[] nameArray = name.split(" ");
+                if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]")) text.add(name);
+
 
                 // Check if subCommand args contain <[ ]> and store in list
 
@@ -107,6 +122,13 @@ public class SubCommand implements CMDFWSubCommand {
             nameList.putIfAbsent(name, uuidList);
             ArrayList<UUID> uuidArrayList = new ArrayList<>();
             bannedList.putIfAbsent(name, uuidArrayList);
+
+
+            // CHECK FOR TEXT
+
+            String[] nameArray = name.split(" ");
+            if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]")) text.add(name);
+
 
             // Check if subCommand args contain <[ ]> and store in list
             List<String> varArgList = Arrays.stream(name.split(" "))
@@ -179,6 +201,7 @@ public class SubCommand implements CMDFWSubCommand {
         nameList = new HashMap<>();
         varArg = new HashMap<>();
         bannedList = new HashMap<>();
+        text = new ArrayList<>();
         return this;
     }
 
@@ -188,6 +211,11 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     // GETTER, SETTER, ADDER
+
+    public boolean containsText(String nameSubCommand) {
+        return text.contains(nameSubCommand);
+    }
+
     @Override
     public SubCommand addSetting(Settings setting) {
         settings.add(setting);

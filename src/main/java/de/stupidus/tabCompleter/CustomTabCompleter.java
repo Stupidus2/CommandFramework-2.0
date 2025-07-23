@@ -1,7 +1,6 @@
 package de.stupidus.tabCompleter;
 
 import de.stupidus.subCommand.SubCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
@@ -29,10 +28,12 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                         if (name != null) {
 
                             if (!subCommand.getNameList().get(name).isEmpty()) {
-                                if (sender instanceof Player player && !subCommand.getNameList().get(name).contains(player.getUniqueId())) continue;
+                                if (sender instanceof Player player && !subCommand.getNameList().get(name).contains(player.getUniqueId()))
+                                    continue;
                             }
 
-                            if (subCommand.isBanned(name, sender instanceof  Player player ? player.getUniqueId() : null)) continue;
+                            if (subCommand.isBanned(name, sender instanceof Player player ? player.getUniqueId() : null))
+                                continue;
 
                             String[] subParts = name.split(" ");
                             int commandLength = subParts.length;
@@ -47,6 +48,14 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
 
                                     if (containsVarArg && strSub.startsWith("<[") && strSub.endsWith("]>")) {
                                         if (strSub.equals("<[]>")) {
+                                            tabComplete.remove(strSub);
+                                        } else {
+                                            tabComplete.add(" ");
+                                        }
+                                    }
+
+                                    if (subCommand.containsText(name) && strSub.startsWith("[") && strSub.endsWith("]")) {
+                                        if (strSub.equals("[]")) {
                                             tabComplete.remove(strSub);
                                         } else {
                                             tabComplete.add(" ");
@@ -85,6 +94,14 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                                                 }
                                             }
 
+                                            if (subCommand.containsText(name) && strSub.startsWith("[") && strSub.endsWith("]")) {
+                                                if (strSub.equals("[]")) {
+                                                    tabComplete.remove(strSub);
+                                                } else {
+                                                    tabComplete.add(" ");
+                                                }
+                                            }
+
                                             String strArg = args[i];
                                             char[] lettersArg = strArg.toCharArray();
 
@@ -99,6 +116,21 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
                                                     }
                                                 }
                                             }
+
+                                            if (subCommand.containsText(name)) {
+
+                                                String strText = args[i];
+                                                char[] lettersText = strArg.toCharArray();
+                                                for (int i2 = 0; i2 < lettersText.length; i2++) {
+                                                    if (i2 < lettersSub.length) {
+                                                        if (lettersText[i2] != lettersText[i2] || containsVarArg && subCommand.containsText(name)) {
+                                                            tabComplete.remove(" ");
+                                                            tabComplete.remove(subParts[i]);
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -110,6 +142,7 @@ public class CustomTabCompleter extends TabCompleterSuper implements TabComplete
         }
         return tabComplete;
     }
+
     public void updateSubCommands(List<SubCommand> subCommands) {
         this.subCommands = subCommands;
     }

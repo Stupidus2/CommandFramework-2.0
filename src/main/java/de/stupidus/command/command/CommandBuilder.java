@@ -28,10 +28,13 @@ public class CommandBuilder extends BaseCommand {
     }
 
     public CommandBuilder build(Object instance) {
+        return build(instance, false);
+    }
+    public CommandBuilder build(Object instance, Boolean normalRegistration) {
+        this.normalRegistration = normalRegistration;
         commandFramework.addCommand(this, instance);
         return this;
     }
-
 
 
     @Override

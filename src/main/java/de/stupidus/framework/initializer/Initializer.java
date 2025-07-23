@@ -50,9 +50,16 @@ public class Initializer {
 
             for (BaseCommand command : copy) {
 
-                CommandMap map = getCommandMap();
-                if (map.getCommand(command.getName()) == null) {
-                    map.register(command.getName(), command);
+                if (!command.getNormalRegistration()) {
+                    CommandMap map = getCommandMap();
+                    if (map.getCommand(command.getName()) == null) {
+                        map.register(command.getName(), command);
+                    }
+                } else {
+
+                    plugin1.getCommand(command.getName()).setExecutor(command);
+                    plugin1.getCommand(command.getName()).setTabCompleter(command);
+
                 }
 
                 Bukkit.getPluginManager().registerEvents(command, plugin);
@@ -71,6 +78,9 @@ public class Initializer {
                 for (Class<?> clazz : classes) {
                     if (clazz.isAnnotationPresent(annotation)) {
                         if (className == null || clazz.getName().equalsIgnoreCase(className)) {
+
+                            if (clazz.getName().equals("de.stupidus.command.command.CommandBuilder")) continue;
+
                             Object instance = clazz.getDeclaredConstructor().newInstance();
                             for (Method method : clazz.getMethods()) {
                                 if (method.getName().equalsIgnoreCase(methodName)) {
@@ -207,7 +217,9 @@ public class Initializer {
                 for (Class<?> clazz : classes) {
                     for (Method method : clazz.getMethods()) {
                         if (method.isAnnotationPresent(InitializeMethod.class)) {
+
                             Object instance = clazz.getDeclaredConstructor().newInstance();
+
                             invokeMethod(method, instance);
                         }
                     }
