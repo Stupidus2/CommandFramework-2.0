@@ -32,6 +32,7 @@ public class SubCommand implements CMDFWSubCommand {
     public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete) {
         this(commandFramework, name, tabComplete, null);
     }
+
     public SubCommand(CommandFramework commandFramework, String name, boolean tabComplete, CommandBuilder commandBuilder) {
         this.commandFramework = commandFramework;
         this.commandManager = this.commandFramework.getCommandManager();
@@ -45,6 +46,7 @@ public class SubCommand implements CMDFWSubCommand {
     public SubCommand(CommandFramework commandFramework, List<String> nameList, boolean tabComplete) {
         this(commandFramework, nameList, tabComplete, null);
     }
+
     public SubCommand(CommandFramework commandFramework, List<String> nameList, boolean tabComplete, CommandBuilder commandBuilder) {
         this.commandFramework = commandFramework;
         this.commandManager = this.commandFramework.getCommandManager();
@@ -68,7 +70,8 @@ public class SubCommand implements CMDFWSubCommand {
             // CHECK FOR TEXT
 
             String[] nameArray = name.split(" ");
-            if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]")) text.add(name);
+            if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]"))
+                text.add(name);
 
 
             // Check if subCommand args contain <[ ]> and store in list
@@ -97,7 +100,8 @@ public class SubCommand implements CMDFWSubCommand {
                 // CHECK FOR TEXT
 
                 String[] nameArray = name.split(" ");
-                if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]")) text.add(name);
+                if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]"))
+                    text.add(name);
 
 
                 // Check if subCommand args contain <[ ]> and store in list
@@ -127,7 +131,8 @@ public class SubCommand implements CMDFWSubCommand {
             // CHECK FOR TEXT
 
             String[] nameArray = name.split(" ");
-            if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]")) text.add(name);
+            if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]"))
+                text.add(name);
 
 
             // Check if subCommand args contain <[ ]> and store in list
@@ -141,11 +146,13 @@ public class SubCommand implements CMDFWSubCommand {
         }
         return this;
     }
+
     public SubCommand addAccess(String nameSubCommand, UUID uuid) {
         if (nameList.get(nameSubCommand) == null || nameList.get(nameSubCommand).contains(uuid)) return this;
         nameList.get(nameSubCommand).add(uuid);
         return this;
     }
+
     public SubCommand removeAccess(String nameSubCommand, UUID uuid) {
         if (nameList.get(nameSubCommand) == null) return this;
         nameList.get(nameSubCommand).remove(uuid);
@@ -163,7 +170,8 @@ public class SubCommand implements CMDFWSubCommand {
     }
 
     public SubCommand removeBan(String nameSubCommand, UUID uuid) {
-        if (nameList.get(nameSubCommand) == null || !bannedList.get(nameSubCommand).contains(uuid) || uuid == null) return this;
+        if (nameList.get(nameSubCommand) == null || !bannedList.get(nameSubCommand).contains(uuid) || uuid == null)
+            return this;
         bannedList.get(nameSubCommand).remove(uuid);
         return this;
     }
@@ -216,6 +224,15 @@ public class SubCommand implements CMDFWSubCommand {
         return text.contains(nameSubCommand);
     }
 
+    public String getCommandWithoutText(String nameSubCommand) {
+        nameSubCommand = nameSubCommand.substring(0, nameSubCommand.lastIndexOf(" "));
+        return nameSubCommand;
+    }
+
+    public int getTextBeginnIndex(String nameSubCommand) {
+        return nameSubCommand.split(" ").length - 1;
+    }
+
     @Override
     public SubCommand addSetting(Settings setting) {
         settings.add(setting);
@@ -245,6 +262,7 @@ public class SubCommand implements CMDFWSubCommand {
         this.runnableCode = code;
         return this;
     }
+
     public SubCommand setCode(Consumer<CommandBuilder> code) {
         this.consumerCode = code;
         return this;
@@ -259,6 +277,7 @@ public class SubCommand implements CMDFWSubCommand {
     public Runnable getRunnableCode() {
         return runnableCode;
     }
+
     public Consumer<CommandBuilder> getConsumerCode() {
         return consumerCode;
     }
@@ -277,7 +296,8 @@ public class SubCommand implements CMDFWSubCommand {
     public boolean getTabCompletable() {
         return tabComplete;
     }
+
     public CommandBuilder getCommandBuilder() {
-       return commandBuilder;
+        return commandBuilder;
     }
 }

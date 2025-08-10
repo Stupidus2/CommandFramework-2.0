@@ -12,6 +12,7 @@ import de.stupidus.messages.Messages;
 import de.stupidus.sound.CommandSound;
 import de.stupidus.subCommand.SubCommand;
 import de.stupidus.tabCompleter.CustomTabCompleter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -145,8 +146,15 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
                 }
                 String nameArrayString = String.join(" ", nameArray);
 
+                String commandStringWithoutText = Arrays.stream(commandString.split(" "))
+                        .limit(subCommand.getTextBeginnIndex(name))
+                        .collect(Collectors.joining(" "));
+
                 boolean isMatch = args.length == nameArray.length && nameArrayString.equalsIgnoreCase(commandString);
-                if (!isMatch && !subCommand.containsText(name)) continue;
+                boolean fitsWithText = subCommand.getCommandWithoutText(nameArrayString)
+                        .equalsIgnoreCase(commandStringWithoutText);
+
+                if (!isMatch && !fitsWithText) continue;
 
                 // TEXT CHECK
 
