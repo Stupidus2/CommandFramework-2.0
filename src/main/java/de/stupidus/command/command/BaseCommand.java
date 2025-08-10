@@ -157,10 +157,6 @@ public abstract class BaseCommand extends Command implements CMDFWCommand, Liste
 
                 }
 
-                String commandStringWithoutText = Arrays.stream(commandString.split(" "))
-                        .limit(subCommand.getTextBeginnIndex(name))
-                        .collect(Collectors.joining(" "));
-
                 boolean isMatch = args.length == nameArray.length && nameArrayString.equalsIgnoreCase(commandString);
 
                 if (!isMatch && !fitsWithText) continue;
