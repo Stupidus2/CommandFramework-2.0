@@ -127,7 +127,6 @@ public class SubCommand implements CMDFWSubCommand {
             ArrayList<UUID> uuidArrayList = new ArrayList<>();
             bannedList.putIfAbsent(name, uuidArrayList);
 
-
             // CHECK FOR TEXT
 
             String[] nameArray = name.split(" ");
