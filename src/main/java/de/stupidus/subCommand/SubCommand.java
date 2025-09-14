@@ -100,7 +100,7 @@ public class SubCommand implements CMDFWSubCommand {
                 // CHECK FOR TEXT
 
                 String[] nameArray = name.split(" ");
-                if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]"))
+                if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]"))
                     text.add(name);
 
 
@@ -127,11 +127,10 @@ public class SubCommand implements CMDFWSubCommand {
             ArrayList<UUID> uuidArrayList = new ArrayList<>();
             bannedList.putIfAbsent(name, uuidArrayList);
 
-
             // CHECK FOR TEXT
 
             String[] nameArray = name.split(" ");
-            if (nameArray[name.length() - 1].startsWith("[") && nameArray[name.length() - 1].endsWith("]"))
+            if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]"))
                 text.add(name);
 
 
