@@ -158,6 +158,25 @@ public class SubCommand implements CMDFWSubCommand {
         return this;
     }
 
+    public SubCommand removeAccessIfNameListContains(String partNameSubCommand, UUID uuid) {
+        List<String> filteredNameList = nameList.keySet().stream().filter(cmdName -> cmdName.contains(partNameSubCommand)).toList();
+        if (filteredNameList.isEmpty()) return this;
+
+        for (String singleChoose : filteredNameList) {
+            nameList.get(singleChoose).removeIf(player -> player == uuid);
+        }
+
+        return this;
+    }
+
+    public SubCommand removeIfNameListContains(String partNameSubCommand) {
+        List<String> filteredNameList = nameList.keySet().stream().filter(cmdName -> cmdName.contains(partNameSubCommand)).toList();
+        if (filteredNameList.isEmpty()) return this;
+
+        filteredNameList.forEach(singleChoose -> nameList.remove(singleChoose));
+        return this;
+    }
+
     public boolean hasEveryoneAccess(String nameSubCommand) {
         return nameList.get(nameSubCommand).isEmpty() || nameList.get(nameSubCommand) == null;
     }
