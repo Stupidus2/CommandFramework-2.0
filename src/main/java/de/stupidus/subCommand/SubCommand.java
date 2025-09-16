@@ -120,28 +120,28 @@ public class SubCommand implements CMDFWSubCommand {
 
     @Override
     public SubCommand addChoose(String name, UUID uuid) {
-        if (name != null && !nameList.containsKey(name)) {
-            List<UUID> uuidList = new ArrayList<>();
-            uuidList.add(uuid);
-            nameList.putIfAbsent(name, uuidList);
-            ArrayList<UUID> uuidArrayList = new ArrayList<>();
-            bannedList.putIfAbsent(name, uuidArrayList);
+        if (name == null) return this;
 
-            // CHECK FOR TEXT
+        List<UUID> uuidList = nameList.computeIfAbsent(name, k -> new ArrayList<>());
+        if(!uuidList.contains(uuid)) uuidList.add(uuid);
 
-            String[] nameArray = name.split(" ");
-            if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]"))
-                text.add(name);
+        ArrayList<UUID> uuidArrayList = new ArrayList<>();
+        bannedList.putIfAbsent(name, uuidArrayList);
+
+        // CHECK FOR TEXT
+
+        String[] nameArray = name.split(" ");
+        if (nameArray[nameArray.length - 1].startsWith("[") && nameArray[nameArray.length - 1].endsWith("]"))
+            text.add(name);
 
 
-            // Check if subCommand args contain <[ ]> and store in list
-            List<String> varArgList = Arrays.stream(name.split(" "))
-                    .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
-                    .collect(Collectors.toList());
+        // Check if subCommand args contain <[ ]> and store in list
+        List<String> varArgList = Arrays.stream(name.split(" "))
+                .filter(s -> s.startsWith("<[") && s.endsWith("]>"))
+                .collect(Collectors.toList());
 
-            if (!varArgList.isEmpty()) {
-                varArg.putIfAbsent(name, varArgList);
-            }
+        if (!varArgList.isEmpty()) {
+            varArg.putIfAbsent(name, varArgList);
         }
         return this;
     }
