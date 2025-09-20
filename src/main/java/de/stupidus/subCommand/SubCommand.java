@@ -123,7 +123,7 @@ public class SubCommand implements CMDFWSubCommand {
         if (name == null) return this;
 
         List<UUID> uuidList = nameList.computeIfAbsent(name, k -> new ArrayList<>());
-        if(!uuidList.contains(uuid)) uuidList.add(uuid);
+        if (!uuidList.contains(uuid)) uuidList.add(uuid);
 
         ArrayList<UUID> uuidArrayList = new ArrayList<>();
         bannedList.putIfAbsent(name, uuidArrayList);
@@ -174,6 +174,13 @@ public class SubCommand implements CMDFWSubCommand {
         if (filteredNameList.isEmpty()) return this;
 
         filteredNameList.forEach(singleChoose -> nameList.remove(singleChoose));
+        return this;
+    }
+
+    public SubCommand removeAllAccessForPlayer(UUID uuid) {
+        for (List<UUID> uuidList : nameList.values()) {
+            uuidList.removeIf(id -> id.equals(uuid));
+        }
         return this;
     }
 
