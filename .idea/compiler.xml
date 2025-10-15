@@ -9,5 +9,9 @@
         <module name="CommandFramework" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CMDFWTest" target="17" />
+      <module name="Test" target="24" />
+    </bytecodeTargetLevel>
   </component>
 </project>
