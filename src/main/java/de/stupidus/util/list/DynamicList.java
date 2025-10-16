@@ -17,7 +17,7 @@ public class DynamicList<T> implements Iterable<T> {
 
     public void add(T value) {
         if (size >= capacity)
-            throw new IllegalStateException("Liste voll (dieses Segment kann nicht wachsen).");
+            throw new IllegalStateException("list is full");
         pool.set(startIndex + size, value);
         size++;
     }
