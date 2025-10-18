@@ -59,9 +59,14 @@ public class Initializer {
                                 map.register(command.getName(), command);
                             }
                         } else {
+                            if(plugin.getCommand(command.getName()) == null) {
+                                System.getLogger("Command was null: " + command.getName() + " in " + command.getClass().getName());
+                                continue;
+                            }
 
                             plugin1.getCommand(command.getName()).setExecutor(command);
                             plugin1.getCommand(command.getName()).setTabCompleter(command);
+
 
                         }
 
@@ -70,7 +75,7 @@ public class Initializer {
                         containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "onCommandCustom"));
 
                     } catch (Exception e) {
-                        System.getLogger("Named: " + command.getName() + " in: " + command.getClass().getName());
+                        System.getLogger("Named " + command.getName() + " in " + command.getClass().getName());
                         e.printStackTrace();
                     }
                 }
