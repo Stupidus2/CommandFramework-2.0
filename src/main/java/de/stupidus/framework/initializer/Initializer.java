@@ -39,7 +39,8 @@ public class Initializer {
     public void register(JavaPlugin plugin) {
 
         // GeneratePluginYML.generate();
-
+        int completed = 0;
+        String stuckAt = "";
         try {
             plugin1 = plugin;
             updateInitializeMethods();
@@ -50,6 +51,7 @@ public class Initializer {
                 List<BaseCommand> copy = new ArrayList<>(CommandFramework.getCommands());
 
                 for (BaseCommand command : copy) {
+                    stuckAt = command.getName();
 
                     try {
 
@@ -59,14 +61,14 @@ public class Initializer {
                                 map.register(command.getName(), command);
                             }
                         } else {
-                            if(plugin.getCommand(command.getName()) == null) {
+                            if (plugin.getCommand(command.getName()) == null) {
                                 System.getLogger("Command was null: " + command.getName() + " in " + command.getClass().getName());
-                                continue;
+                            } else {
+
+                                plugin1.getCommand(command.getName()).setExecutor(command);
+                                plugin1.getCommand(command.getName()).setTabCompleter(command);
+
                             }
-
-                            plugin1.getCommand(command.getName()).setExecutor(command);
-                            plugin1.getCommand(command.getName()).setTabCompleter(command);
-
 
                         }
 
@@ -78,9 +80,11 @@ public class Initializer {
                         System.getLogger("Named " + command.getName() + " in " + command.getClass().getName());
                         e.printStackTrace();
                     }
+                    completed++;
                 }
             }
         } catch (Exception e) {
+            System.getLogger("Named " + completed + " at " + stuckAt);
             e.printStackTrace();
         }
     }
