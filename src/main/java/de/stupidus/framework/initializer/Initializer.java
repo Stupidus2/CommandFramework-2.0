@@ -38,34 +38,45 @@ public class Initializer {
 
     public void register(JavaPlugin plugin) {
 
-       // GeneratePluginYML.generate();
+        // GeneratePluginYML.generate();
 
-        plugin1 = plugin;
-        updateInitializeMethods();
-        listenerAnnotation();
-        executeMethod(null, "initialize", Initialize.class);
-        if (plugin != null) {
+        try {
+            plugin1 = plugin;
+            updateInitializeMethods();
+            listenerAnnotation();
+            executeMethod(null, "initialize", Initialize.class);
+            if (plugin != null) {
 
-            List<BaseCommand> copy = new ArrayList<>(CommandFramework.getCommands());
+                List<BaseCommand> copy = new ArrayList<>(CommandFramework.getCommands());
 
-            for (BaseCommand command : copy) {
+                for (BaseCommand command : copy) {
 
-                if (!command.getNormalRegistration()) {
-                    CommandMap map = getCommandMap();
-                    if (map.getCommand(command.getName()) == null) {
-                        map.register(command.getName(), command);
+                    try {
+
+                        if (!command.getNormalRegistration()) {
+                            CommandMap map = getCommandMap();
+                            if (map.getCommand(command.getName()) == null) {
+                                map.register(command.getName(), command);
+                            }
+                        } else {
+
+                            plugin1.getCommand(command.getName()).setExecutor(command);
+                            plugin1.getCommand(command.getName()).setTabCompleter(command);
+
+                        }
+
+                        Bukkit.getPluginManager().registerEvents(command, plugin);
+
+                        containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "onCommandCustom"));
+
+                    } catch (Exception e) {
+                        System.getLogger("Named: " + command.getName() + " in: " + command.getClass().getName());
+                        e.printStackTrace();
                     }
-                } else {
-
-                    plugin1.getCommand(command.getName()).setExecutor(command);
-                    plugin1.getCommand(command.getName()).setTabCompleter(command);
-
                 }
-
-                Bukkit.getPluginManager().registerEvents(command, plugin);
-
-                containsExecute.putIfAbsent(command, checkIfMethodIsOverridden(CMDFWCommand.class, command.getClass(), "onCommandCustom"));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
